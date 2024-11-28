@@ -12,4 +12,4 @@ Route::get('/user', function (Request $request) {
 Route::apiResource('/berita', App\Http\Controllers\Api\BeritaController::class);
 
 Route::apiResource('/admin', App\Http\Controllers\Api\AdminController::class);
-
+ 

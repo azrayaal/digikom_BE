@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+Route::resource('/', \App\Http\Controllers\IndexController::class);
+Route::resource('/berita', \App\Http\Controllers\BeritaController::class);
+Route::resource('/kegiatan', \App\Http\Controllers\KegiatanController::class);
