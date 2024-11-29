@@ -4,7 +4,14 @@
 
 <div class="main-panel">
     <div class="content-wrapper" style="background-color: #D1D1D1;">
-        <h3 class="card-title text-black ml-2">Edit Berita</h3>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="card-title text-black">Edit iuran "{{ $iuran->nama_iuran }}"</h3>
+            <div class="mb-3">
+                <button onclick="window.location.href='{{ route('iuran.index') }}'" class="btn btn-primary">
+                    ← Kembali ke Daftar iuran
+                </button>
+            </div>
+        </div>
 
         <div class="col grid-margin stretch-card">
             <div class="card" style="background-color: #2A2A2A;">
@@ -14,7 +21,9 @@
                         @method('PUT')
                         <div class="form-group">
                             <label for="tittle" class="text-white">Judul Berita</label>
-                            <input type="text" class="form-control" name="tittle" id="tittle" value="{{ $berita->tittle }}" required>
+                            <input type="text" class="form-control" name="tittle" id="tittle" value="{{ $berita->tittle }}" 
+                            onfocus="this.style.backgroundColor='#2A3038'; this.style.color='#ffffff';"
+                            required>
                         </div>
 
                         <div class="form-group">
@@ -24,7 +33,7 @@
 
                         <div class="form-group">
                             <label for="content" class="text-white">Konten Berita</label>
-                            <textarea class="form-control" name="content" id="content" rows="5" required>{{ $berita->content }}</textarea>
+                            <textarea class="form-control" name="content" id="content" rows="5" required onfocus="this.style.backgroundColor='#2A3038'; this.style.color='#ffffff';">{{ $berita->content }}</textarea>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Update Berita</button>
@@ -33,5 +42,13 @@
             </div>
         </div>
     </div>
+
+         <!-- Footer -->
+         <footer class="footer" style="background-color: #2A2A2A; padding: 10px 0;">
+            <div class="container text-center">
+                <span class="text-muted d-block text-white">Copyright © digikom.com {{ date('Y') }}</span>
+                <span class="text-muted d-block text-white">All Rights Reserved</span>
+            </div>
+        </footer>
 </div>
 @include( 'components.footer')

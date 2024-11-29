@@ -76,13 +76,12 @@
             </div>
         </div>
 
+    </div>
         <!-- Pagination -->
         <div class="d-flex justify-content-center mt-4">
             {{ $iuran->links('pagination::bootstrap-4') }}
         </div>
     </div>
-    </div>
-
         <!-- Footer -->
         <footer class="footer" style="background-color: #2A2A2A; padding: 10px 0;">
             <div class="container text-center">
@@ -91,56 +90,4 @@
             </div>
         </footer>
 </div>
-
-
-        <!-- main-panel ends -->
-
-@include( 'components.footer')
-<style>
-    .pagination {
-        display: flex;
-        justify-content: center;
-        padding: 10px;
-    }
-
-    .pagination .page-item .page-link {
-        color: #ffffff;
-        background-color: #2A2A2A;
-        border: 1px solid #D1D1D1;
-        border-radius: 5px;
-        margin: 0 5px;
-        padding: 8px 12px;
-        transition: all 0.3s ease;
-    }
-
-    .pagination .page-item .page-link:hover {
-        background-color: #ffffff;
-        color: #2A2A2A;
-        border-color: #2A2A2A;
-    }
-
-    .pagination .page-item.active .page-link {
-        background-color: #D1D1D1;
-        color: #2A2A2A;
-        border-color: #2A2A2A;
-    }
-
-    .pagination .page-item.disabled .page-link {
-        background-color: #E5E5E5;
-        color: #A0A0A0;
-    }
-</style>
-
-<style>
-    /* Efek hover pada baris tabel */
-    tbody tr:hover {
-        background-color: #2A2A2A; /* Ganti warna latar belakang jika diinginkan */
-        color: #ffffff; /* Warna teks menjadi putih */
-    }
-
-    /* Pastikan warna teks anak elemen juga berubah */
-    tbody tr:hover td, tbody tr:hover a {
-        color: #ffffff !important;
-    }
-</style>
 

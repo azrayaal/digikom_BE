@@ -1,6 +1,6 @@
 
 
-  @include('components.header')
+@include('components.header')
 @include('components.sidebar')
 @include('components.navbar')
 
@@ -15,7 +15,7 @@
             </button>
         </div>
 
-        <!-- Header Berita -->
+        <!-- Header  -->
         <div class="card mb-4" style="background-image: url('{{ asset('storage/' . $iuran->banner) }}'); background-size: cover; background-position: center;border: none; border-radius: 10px;">
             <div class="card-body d-flex flex-column justify-content-end" style="background: rgba(0, 0, 0, 0.6); height: 100%; border-radius: 10px;">
                 <p class="text-muted mb-0">By: {{ $iuran->creator->full_name ?? 'Admin' }}</p>
@@ -57,37 +57,3 @@
 
 
 @include( 'components.footer')
-<style>
-    .pagination {
-        display: flex;
-        justify-content: center;
-        padding: 10px;
-    }
-
-    .pagination .page-item .page-link {
-        color: #ffffff;
-        background-color: #2A2A2A;
-        border: 1px solid #D1D1D1;
-        border-radius: 5px;
-        margin: 0 5px;
-        padding: 8px 12px;
-        transition: all 0.3s ease;
-    }
-
-    .pagination .page-item .page-link:hover {
-        background-color: #ffffff;
-        color: #2A2A2A;
-        border-color: #2A2A2A;
-    }
-
-    .pagination .page-item.active .page-link {
-        background-color: #D1D1D1;
-        color: #2A2A2A;
-        border-color: #2A2A2A;
-    }
-
-    .pagination .page-item.disabled .page-link {
-        background-color: #E5E5E5;
-        color: #A0A0A0;
-    }
-</style>

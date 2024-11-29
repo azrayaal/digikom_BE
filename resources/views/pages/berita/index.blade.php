@@ -11,45 +11,69 @@
             <a href="{{ route('berita.create') }}" class="btn btn-primary">Create New Berita</a>
         </div>
         <div class="col grid-margin stretch-card">
-            <div class="card" style="background-color: #2A2A2A;">
-                <div class="card-body">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="preview-list">
-                            @foreach ($berita as $item)
-                            <a href="{{ route('berita.show', $item->id) }}" class="text-decoration-none ">
-                                <div class="preview-item border-bottom" style="border-bottom-width: 3px; border-color: #8C8D90!important">
-                                    <div class="preview-thumbnail">
-                                        <img src="{{ asset('storage/' . $item->banner) }}" alt="banner" class="img-fluid" style="max-width: 100px; border-radius: 5px;">
-                                    </div>
-                                    <div class="preview-item-content d-sm-flex flex-grow ">
-                                    <div class="flex-grow d-flex flex-column justify-content-between " style="height: 100%;">
-                                        <h6 class="preview-subject text-white">{{ $item->tittle }}</h6>
-                                        <p class="text-muted mb-0 ">By: {{ Str::limit(strip_tags($item->creator->full_name), 100) }}</p>
-                                    </div>
-                                    <div class="text-sm-right pt-2 pt-sm-0 ml-auto">
-                                        <p class="text-muted mb-2">{{ $item->created_at->diffForHumans() }}</p>
-                                        <p class="text-muted mb-0">Date: {{ $item->created_at->format('d M Y, H:i') ?? 'Tidak diketahui' }}</p>
-                                        <!-- Tombol Edit dan Delete -->
-                                        <div class="mt-2">
-                                            <a href="{{ route('berita.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                            <form action="{{ route('berita.destroy', $item->id) }}" method="POST" style="display: inline-block;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus berita ini?')">Delete</button>
-                                            </form>
-                                        </div>
+    <div class="card" style="background-color: #2A2A2A;">
+        <div class="card-body">
+            <!-- Filter dan Pencarian -->
+            <div class="mb-4 d-flex justify-content-between align-items-center">
+                <!-- Dropdown Show Entries -->
+                <form action="{{ route('berita.index') }}" method="GET" class="">
+                    <select name="per_page" onchange="this.form.submit()" class="form-control text-white" style="background-color: #2A2A2A; border: 1px solid #8C8D90;">
+                        <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>Show 10</option>
+                        <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>Show 25</option>
+                        <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>Show 50</option>
+                        <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>Show 100</option>
+                    </select>
+                </form>
+
+                <!-- Form Pencarian -->
+                <form action="{{ route('berita.index') }}" method="GET" class="d-flex align-items-center">
+                    <input type="text" name="search" class="form-control text-white" placeholder="Cari berita..."
+                        value="{{ request('search') }}" 
+                        style="background-color: #2A3038; border: 1px solid #8C8D90;"
+                        onfocus="this.style.backgroundColor='#2A2A2A'; this.style.color='#ffffff';">
+                    <button type="submit" class="btn btn-primary ml-2">Search</button>
+                </form>
+            </div>
+
+            <!-- Daftar Berita -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="preview-list">
+                        @foreach ($berita as $item)
+                        <div class="preview-item border-bottom" 
+                            style="border-bottom-width: 3px; border-color: #8C8D90!important; cursor: pointer;"
+                            onclick="window.location.href='{{ route('berita.show', $item->id) }}'">
+                            <div class="preview-thumbnail">
+                                <img src="{{ asset('storage/' . $item->banner) }}" alt="banner" class="img-fluid" style="max-width: 100px; border-radius: 5px;">
+                            </div>
+                            <div class="preview-item-content d-sm-flex flex-grow">
+                                <div class="flex-grow d-flex flex-column justify-content-between" style="height: 100%;">
+                                    <h6 class="preview-subject text-white">{{ $item->tittle }}</h6>
+                                    <p class="text-muted mb-0">By: {{ Str::limit(strip_tags($item->creator->full_name), 100) }}</p>
+                                </div>
+                                <div class="text-sm-right pt-2 pt-sm-0 ml-auto">
+                                    <p class="text-muted mb-2">{{ $item->created_at->diffForHumans() }}</p>
+                                    <p class="text-muted mb-0">Date: {{ $item->created_at->format('d M Y, H:i') ?? 'Tidak diketahui' }}</p>
+                                    <!-- Tombol Edit dan Delete -->
+                                    <div class="mt-2">
+                                        <a href="{{ route('berita.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                        <form action="{{ route('berita.destroy', $item->id) }}" method="POST" style="display: inline-block;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus berita ini?')">Delete</button>
+                                        </form>
                                     </div>
                                 </div>
-                                </div>
-                            </a>
-                            @endforeach
                             </div>
                         </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+        </div>
+
     <!-- Pagination -->
     <div class="d-flex justify-content-center mt-4">
     <nav aria-label="Page navigation">
@@ -57,9 +81,11 @@
     </nav>
     </div>
     </div>
-        <footer class="footer">
-            <div class="d-sm-flex justify-content-center justify-content-sm-between">
-                <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © digikom.com 2024</span>
+            <!-- Footer -->
+            <footer class="footer" style="background-color: #2A2A2A; padding: 10px 0;">
+            <div class="container text-center">
+                <span class="text-muted d-block text-white">Copyright © digikom.com {{ date('Y') }}</span>
+                <span class="text-muted d-block text-white">All Rights Reserved</span>
             </div>
         </footer>
 </div>
