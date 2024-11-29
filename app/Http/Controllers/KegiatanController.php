@@ -14,16 +14,22 @@ use Illuminate\View\View;
 
 class KegiatanController extends Controller
 {
-    public function index() : View
+    public function index(Request $request) : View
     {
-        //get all productsphp artisan serve
+        $search = $request->input('search');
+        $sortBy = $request->input('sort_by', 'nama_kegiatan'); // Default sort by 'bulan'
+        $order = $request->input('order', 'asc'); // Default order 'asc'
+        $perPage = $request->input('per_page', 10);
 
-        $kegiatan = Kegiatan::latest()->paginate(10);
-        Log::info('Kegiatan:', ['data' => $kegiatan]);
-        //render view with products
-        return view('pages.kegiatan.index', compact('kegiatan'));
+        // Query dengan pencarian dan pengurutan
+        $kegiatan = Kegiatan::when($search, function ($query, $search) {
+                return $query->where('nama_kegiatan', 'like', "%{$search}%")->orWhere('tanggal_kegiatan', 'like', "%{$search}%")->orWhere('waktu_kegiatan', 'like', "%{$search}%");
+            })
+            ->orderBy($sortBy, $order)
+            ->paginate($perPage);
+    
+        return view('pages.kegiatan.index', compact('kegiatan', 'search', 'sortBy', 'order'));
     }
-
 
     public function show($id)
     {
@@ -42,7 +48,7 @@ class KegiatanController extends Controller
     {
          // Validasi input
         $request->validate([
-            'nama_kegiatan' => 'required|max:255',
+            'nama_kegiatan' => 'required|unique:kegiatans,nama_kegiatan',
             'tanggal_kegiatan' => 'required',
             'waktu_kegiatan' => 'required',
             'lokasi_kegiatan' => 'required',

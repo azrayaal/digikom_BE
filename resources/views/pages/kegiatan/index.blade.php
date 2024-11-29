@@ -13,13 +13,40 @@
         <div class="col grid-margin stretch-card">
             <div class="card" style="background-color: #2A2A2A;">
                 <div class="card-body">
+                <div class="mb-4">
+                    <div class="mb-4 d-flex justify-content-between align-items-center">
+                    <form action="{{ route('kegiatan.index') }}" method="GET" class="">
+                        <select name="per_page" onchange="this.form.submit()" class="form-control text-white">
+                            <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>Show 10</option>
+                            <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>Show 25</option>
+                            <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>Show 50</option>
+                            <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>Show 100</option>
+                        </select>
+                    </form>
+
+                    <form action="{{ route('kegiatan.index') }}" method="GET" class="d-flex align-items-center">
+                        <input type="text" name="search" class="form-control" placeholder="Cari kegiatan..." value="{{ request('search') }}" onfocus="this.style.backgroundColor='#2A3038'; this.style.color='#ffffff';">
+                        <button type="submit" class="btn btn-primary ml-2">Search</button>
+                    </form>
+                </div>
+
+                </div>
                     <table class="table table-hover text-white">
                         <thead>
                             <tr style="background-color: #D1D1D1;">
                                 <th style="color: black;">No</th>
-                                <th style="color: black;">Nama Kegiatan</th>
-                                <th style="color: black;">Tanggal Kegiatan</th>
-                                <th style="color: black;">Waktu Kegiatan</th>
+                                <th style="color: black;">  <a href="{{ route('kegiatan.index', array_merge(request()->all(), ['sort_by' => 'nama_kegiatan', 'order' => request('order') === 'asc' ? 'desc' : 'asc'])) }}" style="color: black;   text-decoration: none!important;">
+                                    Nama Kegiatan <span class="mdi mdi-arrow-expand
+                                {{ request('order') === 'asc' ? 'asc' : 'desc' }}"></span>
+                                </a></th>
+                                <th style="color: black;">  <a href="{{ route('kegiatan.index', array_merge(request()->all(), ['sort_by' => 'tanggal_kegiatan', 'order' => request('order') === 'asc' ? 'desc' : 'asc'])) }}" style="color: black;   text-decoration: none!important;">
+                                Tanggal Kegiatan <span class="mdi mdi-arrow-expand
+                                {{ request('order') === 'asc' ? 'asc' : 'desc' }}"></span>
+                                </a></th>
+                                <th style="color: black;">  <a href="{{ route('kegiatan.index', array_merge(request()->all(), ['sort_by' => 'waktu_kegiatan', 'order' => request('order') === 'asc' ? 'desc' : 'asc'])) }}" style="color: black;   text-decoration: none!important;">
+                                Waktu Kegiatan <span class="mdi mdi-arrow-expand
+                                {{ request('order') === 'asc' ? 'asc' : 'desc' }}"></span>
+                                </a></th>
                                 <th style="color: black;">Lokasi Kegiatan</th>
                                 <th style="color: black;">Actions</th>
                             </tr>

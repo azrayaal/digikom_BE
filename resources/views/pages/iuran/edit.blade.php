@@ -19,55 +19,33 @@
                         @csrf
                         @method('PUT')
                         <div class="form-group">
-                            <label for="nama_iuran" class="text-white" style="font-weight: bold;">Nama iuran</label>
+                            <label for="bulan" class="text-white" style="font-weight: bold;">Bulan</label>
+                            <input  type="text"
+                            class="form-control"
+                            name="bulan"
+                            id="bulan"
+                            value="{{ $iuran->bulan }}" 
+                            onfocus="this.style.backgroundColor='#2A3038'; this.style.color='#ffffff';"
+                            required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="jumlah" class="text-white" style="font-weight: bold;">Jumlah</label>
                             <input  type="text" 
                             class="form-control" 
-                            name="nama_iuran" 
-                            id="nama_iuran" 
+                            name="jumlah" 
+                            id="jumlah" 
+                            value="{{ $iuran->jumlah }}" 
+                            onfocus="this.style.backgroundColor='#2A3038'; this.style.color='#ffffff';"
+                            required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="keterangan" class="text-white" style="font-weight: bold;">Keterangan</label>
+                            <textarea class="form-control" name="keterangan" id="keterangan" rows="5" 
                             value="{{ $iuran->nama_iuran }}" 
                             onfocus="this.style.backgroundColor='#2A3038'; this.style.color='#ffffff';"
-                            required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="tanggal_iuran" class="text-white" style="font-weight: bold;">Tanggal iuran</label>
-                            <input  type="date" 
-                            class="form-control" 
-                            name="tanggal_iuran" 
-                            id="tanggal_iuran" 
-                            value="{{ $iuran->tanggal_iuran }}" 
-                            onfocus="this.style.backgroundColor='#2A3038'; this.style.color='#ffffff';"
-                            required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="waktu_iuran" class="text-white" style="font-weight: bold;">Waktu iuran</label>
-                            <input  type="time" 
-                            class="form-control" 
-                            name="waktu_iuran" 
-                            id="waktu_iuran" 
-                            value="{{ $iuran->waktu_iuran }}" 
-                            onfocus="this.style.backgroundColor='#2A3038'; this.style.color='#ffffff';"
-                            required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="lokasi_iuran" class="text-white" style="font-weight: bold;">Lokasi iuran</label>
-                            <input  type="text" 
-                            class="form-control" 
-                            name="lokasi_iuran" 
-                            id="lokasi_iuran" 
-                            value="{{ $iuran->lokasi_iuran }}" 
-                            onfocus="this.style.backgroundColor='#2A3038'; this.style.color='#ffffff';"
-                            required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="deskripsi_iuran" class="text-white" style="font-weight: bold;">Deskripsi iuran</label>
-                            <textarea class="form-control" name="deskripsi_iuran" id="deskripsi_iuran" rows="5" 
-                            value="{{ $iuran->nama_iuran }}" 
-                            onfocus="this.style.backgroundColor='#2A3038'; this.style.color='#ffffff';"
-                            required>{{ $iuran->deskripsi_iuran }}</textarea>
+                            required>{{ $iuran->keterangan }}</textarea>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Update iuran</button>

@@ -14,15 +14,22 @@ use Illuminate\View\View;
 
 class IuranController extends Controller
 {
-    public function index() : View
+    public function index(Request $request) : View
     {
-        //get all productsphp artisan serve
-
-        $iuran = Iuran::latest()->paginate(10);
-        Log::info('Iuran:', ['data' => $iuran]);
-        //render view with products
-        Log::info('Iuran:', ['iuran'=> $iuran]);
-        return view('pages.iuran.index', compact('iuran'));
+        // Ambil input untuk search dan sort
+        $search = $request->input('search');
+        $sortBy = $request->input('sort_by', 'bulan'); // Default sort by 'bulan'
+        $order = $request->input('order', 'asc'); // Default order 'asc'
+        $perPage = $request->input('per_page', 10);
+        // Query dengan pencarian dan pengurutan
+        $iuran = Iuran::when($search, function ($query, $search) {
+                return $query->where('bulan', 'like', "%{$search}%")
+                            ->orWhere('jumlah', 'like', "%{$search}%");
+            })
+            ->orderBy($sortBy, $order)
+            ->paginate($perPage);
+    
+        return view('pages.iuran.index', compact('iuran', 'search', 'sortBy', 'order'));
     }
 
 
@@ -43,7 +50,7 @@ class IuranController extends Controller
     {
          // Validasi input
         $request->validate([
-            'bulan' => 'required|max:255',
+            'bulan' => 'required|unique:iurans,bulan',
             'jumlah' => 'required',
             'keterangan' => 'required',
         ]);
@@ -78,7 +85,6 @@ class IuranController extends Controller
         $iuran = Iuran::findOrFail($id);
 
             // Menyimpan data iuran ke database
-            $iuran = new Iuran;
             $iuran->bulan = $request->bulan;
             $iuran->jumlah = $request->jumlah;
             $iuran->keterangan = $request->keterangan;

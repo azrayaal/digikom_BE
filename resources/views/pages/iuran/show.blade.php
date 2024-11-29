@@ -18,7 +18,6 @@
         <!-- Header Berita -->
         <div class="card mb-4" style="background-image: url('{{ asset('storage/' . $iuran->banner) }}'); background-size: cover; background-position: center;border: none; border-radius: 10px;">
             <div class="card-body d-flex flex-column justify-content-end" style="background: rgba(0, 0, 0, 0.6); height: 100%; border-radius: 10px;">
-                <h1 class="text-white fw-bold">{{ $iuran->nama_iuran }}</h1>
                 <p class="text-muted mb-0">By: {{ $iuran->creator->full_name ?? 'Admin' }}</p>
                 <p class="text-muted">Published: {{ $iuran->created_at->diffForHumans() }}</p>
             </div>
@@ -31,17 +30,17 @@
                     <!-- Info iuran -->
                     <div class="col-md-4">
                         <h5 class="text-muted fw-bold">Detail iuran</h5>
-                        <p class="text-white"><strong>Waktu:</strong> {{ $iuran->waktu_iuran }}</p>
-                        <p class="text-white"><strong>Tanggal:</strong> {{ $iuran->tanggal_iuran }}</p>
-                        <p class="text-white"><strong>Lokasi:</strong> {{ $iuran->lokasi_iuran }}</p>
+                        <p class="text-white"><strong>Bulan:</strong> {{ $iuran->bulan }}</p>
+                        <p class="text-white"><strong>Jumlah:</strong> {{ $iuran->jumlah }}</p>
+                        <p class="text-white"><strong>Keterangan:</strong> {{ $iuran->keterangan }}</p>
                     </div>
                     <!-- Deskripsi -->
-                    <div class="col-md-8">
+                    <!-- <div class="col-md-8">
                         <h5 class="text-muted fw-bold">Deskripsi</h5>
                         <div class="text-white">
                             {!! $iuran->deskripsi_iuran !!}
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>

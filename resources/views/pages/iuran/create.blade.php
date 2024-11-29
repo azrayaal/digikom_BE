@@ -17,28 +17,18 @@
                 <form action="{{ route('iuran.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
-                        <label for="nama_iuran" class="text-white" style="font-weight: bold;">Nama iuran</label>
-                        <input type="text" class="form-control text-white" name="nama_iuran" id="tittle" required>
+                        <label for="bulan" class="text-white" style="font-weight: bold;">Bulan</label>
+                        <input type="text" class="form-control text-white" name="bulan" id="bulan" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="tanggal_iuran" class="text-white" style="font-weight: bold;">Tanggal iuran</label>
-                        <input type="date" class="form-control" name="tanggal_iuran" id="tanggal_iuran" required>
+                        <label for="jumlah" class="text-white" style="font-weight: bold;">Jumlah</label>
+                        <input type="number" class="form-control text-white" name="jumlah" id="jumlah" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="waktu_iuran" class="text-white" style="font-weight: bold;">Waktu iuran</label>
-                        <input type="time" class="form-control" name="waktu_iuran" id="waktu_iuran" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="lokasi_iuran" class="text-white" style="font-weight: bold;">Lokasi iuran</label>
-                        <textarea class="form-control text-white" name="lokasi_iuran" id="lokasi_iuran" rows="2" required></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="deskripsi_iuran" class="text-white" style="font-weight: bold;">Deskripsi iuran</label>
-                        <textarea class="form-control text-white" name="deskripsi_iuran" id="deskripsi_iuran" rows="5" required></textarea>
+                        <label for="keterangan" class="text-white" style="font-weight: bold;">keterangan</label>
+                        <input type="text" class="form-control text-white" name="keterangan" id="keterangan" required>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Simpan iuran</button>

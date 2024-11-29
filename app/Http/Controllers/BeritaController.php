@@ -45,7 +45,7 @@ class BeritaController extends Controller
      {
          // Validasi input
          $request->validate([
-             'tittle' => 'required|max:255',
+             'tittle' => 'required|unique:beritas,tittle',
              'banner' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
              'content' => 'required',
          ]);
