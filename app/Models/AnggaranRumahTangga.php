@@ -15,6 +15,7 @@ class AnggaranRumahTangga extends Model
      * @var array
      */
     protected $fillable = ['judul_utama', 'sub_judul', 'deskripsi', 'created_by'];
+    
     protected $casts = [
         'created_at' => 'datetime', // Pastikan tanggal dikonversi ke objek Carbon
     ];

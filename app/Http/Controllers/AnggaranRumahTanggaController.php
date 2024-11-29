@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
 //import model product
-use App\Models\Berita; 
+use App\Models\AnggaranRumahTangga; 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,111 +17,95 @@ class AnggaranRumahTanggaController extends Controller
     public function index(Request $request) : View
     {
         $search = $request->input('search');
-        $sortBy = $request->input('sort_by', 'tittle'); // Default sort by 'bulan'
+        $sortBy = $request->input('sort_by', 'judul_utama'); // Default sort by 'judul_utama'
         $order = $request->input('order', 'asc'); // Default order 'asc'
         $perPage = $request->input('per_page', 10);
         // Query dengan pencarian dan pengurutan
-        $berita = Berita::when($search, function ($query, $search) {
-                return $query->where('tittle', 'like', "%{$search}%");
+        $anggaran_rumah_tangga = AnggaranRumahTangga::when($search, function ($query, $search) {
+                return $query->where('judul_utama', 'like', "%{$search}%");
             })
             ->orderBy($sortBy, $order)
             ->paginate($perPage);
     
-        return view('pages.berita.index', compact('berita', 'search', 'sortBy', 'order'));
+        return view('pages.AD_ART.anggaran_rumah_tangga.index', compact('anggaran_rumah_tangga', 'search', 'sortBy', 'order'));
     }
 
 
     public function show($id)
     {
-        $berita = Berita::with('creator')->findOrFail($id); // Ambil berita berdasarkan ID
-        return view('pages.berita.show', compact('berita'));
+        $anggaran_rumah_tangga = AnggaranRumahTangga::with('creator')->findOrFail($id); // Ambil anggaran_rumah_tangga berdasarkan ID
+        return view('pages.AD_ART.anggaran_rumah_tangga.show', compact('anggaran_rumah_tangga'));
     }
 
-     // Menampilkan form untuk membuat berita baru
+     // Menampilkan form untuk membuat anggaran_rumah_tangga baru
     public function create()
     {
-        return view('pages.berita.create');
+        return view('pages.AD_ART.anggaran_rumah_tangga.create');
     }
 
-     // Menyimpan berita baru
+     // Menyimpan anggaran_rumah_tangga baru
     public function store(Request $request)
     {
          // Validasi input
         $request->validate([
-            'tittle' => 'required|unique:beritas,tittle',
-            'banner' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'content' => 'required',
+            'judul_utama' => 'required|unique:anggaran_rumah_tanggas,judul_utama',
+            'sub_judul' => 'required',
+            'deskripsi' => 'required',
         ]);
 
-         // Menyimpan data berita ke database
-        $berita = new Berita;
-        $berita->tittle = $request->tittle;
-        $berita->content = $request->content;
-        //  $berita->created_by = auth()->id();  // Menyimpan ID admin yang membuat berita
-        $berita->created_by = 1;  
-
-         // Menyimpan banner gambar jika ada
-        if ($request->hasFile('banner')) {
-            $imagePath = $request->file('banner')->store('public/berita');
-            $berita->banner = basename($imagePath);
-        }
-
-        $berita->save();
-
+         // Menyimpan data anggaran_rumah_tangga ke database
+        $anggaran_rumah_tangga = new AnggaranRumahTangga;
+        $anggaran_rumah_tangga->judul_utama = $request->judul_utama;
+        $anggaran_rumah_tangga->sub_judul = $request->sub_judul;
+        $anggaran_rumah_tangga->deskripsi = $request->deskripsi;
+        //  $anggaran_rumah_tangga->created_by = auth()->id();  // Menyimpan ID admin yang membuat anggaran_rumah_tangga
+        $anggaran_rumah_tangga->created_by = 1;  
+        $anggaran_rumah_tangga->save();
          // Redirect setelah berhasil menyimpan
-        return redirect()->route('berita.index')->with('success', 'Berita berhasil dibuat!');
+        return redirect()->route('anggaran-rumah-tangga.index')->with('success', 'Anggaran Dasar berhasil dibuat!');
     }
+
 
     public function edit($id)
     {
-        $berita = Berita::findOrFail($id); // Ambil berita berdasarkan ID
-        return view('pages.berita.edit', compact('berita'));
+        $anggaran_rumah_tangga = AnggaranRumahTangga::findOrFail($id); // Ambil anggaran_rumah_tangga berdasarkan ID
+        return view('pages.AD_ART.anggaran_rumah_tangga.edit', compact('anggaran_rumah_tangga'));
     }
 
     public function update(Request $request, $id)
 {
     // Validasi input
     $request->validate([
-        'tittle' => 'required|max:255',
-        'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        'content' => 'required',
+        'judul_utama' => 'required',
+        'sub_judul' => 'required',
+        'deskripsi' => 'required',
     ]);
 
-    // Cari berita berdasarkan ID
-    $berita = Berita::findOrFail($id);
+    // Cari anggaran_rumah_tangga berdasarkan ID
+    $anggaran_rumah_tangga = AnggaranRumahTangga::findOrFail($id);
 
-    // Update data berita
-    $berita->tittle = $request->tittle;
-    $berita->content = $request->content;
+    // Update data anggaran_rumah_tangga
+    $anggaran_rumah_tangga->judul_utama = $request->judul_utama;
+    $anggaran_rumah_tangga->sub_judul = $request->sub_judul;
+    $anggaran_rumah_tangga->deskripsi = $request->deskripsi;
 
-    // Update banner jika ada file baru
-    if ($request->hasFile('banner')) {
-        // Hapus banner lama
-        if ($berita->banner) {
-            Storage::delete('public/berita/' . $berita->banner);
-        }
-        // Simpan banner baru
-        $imagePath = $request->file('banner')->store('public/berita');
-        $berita->banner = basename($imagePath);
-    }
+    $anggaran_rumah_tangga->created_by = 1;
+    $anggaran_rumah_tangga->save();
 
-    $berita->save();
-
-    return redirect()->route('berita.index')->with('success', 'Berita berhasil diperbarui!');
+    return redirect()->route('anggaran-rumah-tangga.index')->with('success', 'Anggaran Dasar berhasil diperbarui!');
 }
 
     public function destroy($id)
     {
-        $berita = Berita::findOrFail($id); // Ambil berita berdasarkan ID
+        $anggaran_rumah_tangga = AnggaranRumahTangga::findOrFail($id); // Ambil anggaran_rumah_tangga berdasarkan ID
 
         // Hapus banner dari storage jika ada
-        if ($berita->banner) {
-            Storage::delete('public/berita/' . $berita->banner);
+        if ($anggaran_rumah_tangga->banner) {
+            Storage::delete('public/anggaran_rumah_tangga/' . $anggaran_rumah_tangga->banner);
         }
 
-        $berita->delete(); // Hapus data berita
+        $anggaran_rumah_tangga->delete(); // Hapus data anggaran_rumah_tangga
 
-        return redirect()->route('berita.index')->with('success', 'Berita berhasil dihapus!');
+        return redirect()->route('anggaran-rumah-tangga.index')->with('success', 'anggaran_rumah_tangga berhasil dihapus!');
     }
-
 }

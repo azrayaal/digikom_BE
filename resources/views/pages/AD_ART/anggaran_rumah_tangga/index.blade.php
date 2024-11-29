@@ -7,15 +7,15 @@
 <div class="main-panel">
     <div class="content-wrapper" style="background-color: #D1D1D1;">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="card-title text-black">anggaran_rumah_tangga:</h3>
-            <a href="{{ route('anggaran_rumah_tangga.create') }}" class="btn btn-primary">Create New anggaran_rumah_tangga</a>
+            <h3 class="card-title text-black">Anggaran Dasar:</h3>
+            <a href="{{ route('anggaran-dasar.create') }}" class="btn btn-primary">Create New Anggaran Dasar</a>
         </div>
         <div class="col grid-margin stretch-card">
             <div class="card" style="background-color: #2A2A2A;">
                 <div class="card-body">
                 <div class="mb-4">
                     <div class="mb-4 d-flex justify-content-between align-items-center">
-                    <form action="{{ route('anggaran_rumah_tangga.index') }}" method="GET" class="">
+                    <form action="{{ route('anggaran-dasar.index') }}" method="GET" class="">
                         <select name="per_page" onchange="this.form.submit()" class="form-control text-white">
                             <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>Show 10</option>
                             <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>Show 25</option>
@@ -24,7 +24,7 @@
                         </select>
                     </form>
 
-                    <form action="{{ route('anggaran_rumah_tangga.index') }}" method="GET" class="d-flex align-items-center">
+                    <form action="{{ route('anggaran-dasar.index') }}" method="GET" class="d-flex align-items-center">
                         <input type="text" name="search" class="form-control" placeholder="Cari anggaran_rumah_tangga..." value="{{ request('search') }}" onfocus="this.style.backgroundColor='#2A3038'; this.style.color='#ffffff';">
                         <button type="submit" class="btn btn-primary ml-2">Search</button>
                     </form>
@@ -34,35 +34,23 @@
                     <thead>
                         <tr style="background-color: #D1D1D1;">
                             <th style="color: black;">No</th>
-                            <th style="color: black;">
-                                <a href="{{ route('anggaran_rumah_tangga.index', array_merge(request()->all(), ['sort_by' => 'bulan', 'order' => request('order') === 'asc' ? 'desc' : 'asc'])) }}" style="color: black;   text-decoration: none!important;">
-                                    Bulan <span class="mdi mdi-arrow-expand
-                                {{ request('order') === 'asc' ? 'asc' : 'desc' }}"></span>
-                                </a>
-                            </th>
-                            <th style="color: black;">
-                                <a href="{{ route('anggaran_rumah_tangga.index', array_merge(request()->all(), ['sort_by' => 'jumlah', 'order' => request('order') === 'asc' ? 'desc' : 'asc'])) }}" style="color: black;   text-decoration: none!important;">
-                                Jumlah <span class="mdi mdi-arrow-expand
-                                {{ request('order') === 'asc' ? 'asc' : 'desc' }}"></span>
-                                </a>
-                            </th>
-                            <th style="color: black;">Keterangan</th>
+                            <th style="color: black;">Judul</th>
+                            <th style="color: black;">Deskripsi</th>
                             <th style="color: black;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($anggaran_rumah_tangga as $item)
-                        <tr onclick="location.href='{{ route('anggaran_rumah_tangga.show', $item->id) }}'" style="cursor: pointer;">
+                        <tr onclick="location.href='{{ route('anggaran-dasar.show', $item->id) }}'" style="cursor: pointer;">
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->bulan }}</td>
-                            <td>{{ $item->jumlah }}</td>
-                            <td>{{ $item->keterangan }}</td>
+                            <td>{{ $item->judul_utama }}</td>
+                            <td>{{ $item->deskripsi }}</td>
                             <td>
-                                <a href="{{ route('anggaran_rumah_tangga.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                <form action="{{ route('anggaran_rumah_tangga.destroy', $item->id) }}" method="POST" style="display: inline-block;">
+                                <a href="{{ route('anggaran-dasar.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                <form action="{{ route('anggaran-dasar.destroy', $item->id) }}" method="POST" style="display: inline-block;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus anggaran_rumah_tangga ini?')">Delete</button>
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus Anggaran Dasar ini?')">Delete</button>
                                 </form>
                             </td>
                         </tr>
