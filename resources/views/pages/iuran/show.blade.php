@@ -10,17 +10,17 @@
     <div class="content-wrapper" style="background-color: #D1D1D1;">
         <!-- Tombol Kembali -->
         <div class="mb-3">
-            <button onclick="window.location.href='{{ route('kegiatan.index') }}'" class="btn btn-primary">
-                ← Kembali ke Daftar Kegiatan
+            <button onclick="window.location.href='{{ route('iuran.index') }}'" class="btn btn-primary">
+                ← Kembali ke Daftar iuran
             </button>
         </div>
 
         <!-- Header Berita -->
-        <div class="card mb-4" style="background-image: url('{{ asset('storage/' . $kegiatan->banner) }}'); background-size: cover; background-position: center;border: none; border-radius: 10px;">
+        <div class="card mb-4" style="background-image: url('{{ asset('storage/' . $iuran->banner) }}'); background-size: cover; background-position: center;border: none; border-radius: 10px;">
             <div class="card-body d-flex flex-column justify-content-end" style="background: rgba(0, 0, 0, 0.6); height: 100%; border-radius: 10px;">
-                <h1 class="text-white fw-bold">{{ $kegiatan->nama_kegiatan }}</h1>
-                <p class="text-muted mb-0">By: {{ $kegiatan->creator->full_name ?? 'Admin' }}</p>
-                <p class="text-muted">Published: {{ $kegiatan->created_at->diffForHumans() }}</p>
+                <h1 class="text-white fw-bold">{{ $iuran->nama_iuran }}</h1>
+                <p class="text-muted mb-0">By: {{ $iuran->creator->full_name ?? 'Admin' }}</p>
+                <p class="text-muted">Published: {{ $iuran->created_at->diffForHumans() }}</p>
             </div>
         </div>
 
@@ -28,18 +28,18 @@
         <div class="card" style="background-color: #2A2A2A; border-radius: 10px;">
             <div class="card-body">
                 <div class="row">
-                    <!-- Info Kegiatan -->
+                    <!-- Info iuran -->
                     <div class="col-md-4">
-                        <h5 class="text-muted fw-bold">Detail Kegiatan</h5>
-                        <p class="text-white"><strong>Waktu:</strong> {{ $kegiatan->waktu_kegiatan }}</p>
-                        <p class="text-white"><strong>Tanggal:</strong> {{ $kegiatan->tanggal_kegiatan }}</p>
-                        <p class="text-white"><strong>Lokasi:</strong> {{ $kegiatan->lokasi_kegiatan }}</p>
+                        <h5 class="text-muted fw-bold">Detail iuran</h5>
+                        <p class="text-white"><strong>Waktu:</strong> {{ $iuran->waktu_iuran }}</p>
+                        <p class="text-white"><strong>Tanggal:</strong> {{ $iuran->tanggal_iuran }}</p>
+                        <p class="text-white"><strong>Lokasi:</strong> {{ $iuran->lokasi_iuran }}</p>
                     </div>
                     <!-- Deskripsi -->
                     <div class="col-md-8">
                         <h5 class="text-muted fw-bold">Deskripsi</h5>
                         <div class="text-white">
-                            {!! $kegiatan->deskripsi_kegiatan !!}
+                            {!! $iuran->deskripsi_iuran !!}
                         </div>
                     </div>
                 </div>

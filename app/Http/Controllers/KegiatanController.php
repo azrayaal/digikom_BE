@@ -19,7 +19,7 @@ class KegiatanController extends Controller
         //get all productsphp artisan serve
 
         $kegiatan = Kegiatan::latest()->paginate(10);
-
+        Log::info('Kegiatan:', ['data' => $kegiatan]);
         //render view with products
         return view('pages.kegiatan.index', compact('kegiatan'));
     }
@@ -32,39 +32,38 @@ class KegiatanController extends Controller
     }
 
      // Menampilkan form untuk membuat kegiatan baru
-     public function create()
-     {
-         return view('pages.kegiatan.create');
-     }
- 
+    public function create()
+    { 
+            return view('pages.kegiatan.create');
+    }
+
      // Menyimpan kegiatan baru
-     public function store(Request $request)
-     {
+    public function store(Request $request)
+    {
          // Validasi input
-         $request->validate([
-             'nama_kegiatan' => 'required|max:255',
-             'tanggal_kegiatan' => 'required',
-             'waktu_kegiatan' => 'required',
-             'lokasi_kegiatan' => 'required',
-             'deskripsi_kegiatan' => 'required',
-         ]);
+        $request->validate([
+            'nama_kegiatan' => 'required|max:255',
+            'tanggal_kegiatan' => 'required',
+            'waktu_kegiatan' => 'required',
+            'lokasi_kegiatan' => 'required',
+            'deskripsi_kegiatan' => 'required',
+        ]);
 
          // Menyimpan data kegiatan ke database
-         $kegiatan = new Kegiatan;
-         $kegiatan->nama_kegiatan = $request->nama_kegiatan;
-         $kegiatan->tanggal_kegiatan = $request->tanggal_kegiatan;
-         $kegiatan->waktu_kegiatan = $request->waktu_kegiatan;
-         $kegiatan->lokasi_kegiatan = $request->lokasi_kegiatan;
-         $kegiatan->deskripsi_kegiatan = $request->deskripsi_kegiatan;
+        $kegiatan = new Kegiatan;
+        $kegiatan->nama_kegiatan = $request->nama_kegiatan;
+        $kegiatan->tanggal_kegiatan = $request->tanggal_kegiatan;
+        $kegiatan->waktu_kegiatan = $request->waktu_kegiatan;
+        $kegiatan->lokasi_kegiatan = $request->lokasi_kegiatan;
+        $kegiatan->deskripsi_kegiatan = $request->deskripsi_kegiatan;
         //  $kegiatan->created_by = auth()->id();  // Menyimpan ID admin yang membuat kegiatan
-         $kegiatan->created_by = 1;  
-         $kegiatan->save();
- 
+        $kegiatan->created_by = 1;  
+        $kegiatan->save();
          // Redirect setelah berhasil menyimpan
-         return redirect()->route('kegiatan.index')->with('success', 'Kegiatan berhasil dibuat!');
-     }
+        return redirect()->route('kegiatan.index')->with('success', 'Kegiatan berhasil dibuat!');
+    }
 
-     public function edit($id)
+    public function edit($id)
     {
         $kegiatan = Kegiatan::findOrFail($id); // Ambil kegiatan berdasarkan ID
         return view('pages.kegiatan.edit', compact('kegiatan'));
@@ -89,7 +88,7 @@ class KegiatanController extends Controller
         $kegiatan->waktu_kegiatan = $request->waktu_kegiatan;
         $kegiatan->lokasi_kegiatan = $request->lokasi_kegiatan;
         $kegiatan->deskripsi_kegiatan = $request->deskripsi_kegiatan;
-
+        $kegiatan->created_by = 1;  
         $kegiatan->save();
 
         return redirect()->route('kegiatan.index')->with('success', 'Kegiatan berhasil diperbarui!');

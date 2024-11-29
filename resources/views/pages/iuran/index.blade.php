@@ -7,8 +7,8 @@
 <div class="main-panel">
     <div class="content-wrapper" style="background-color: #D1D1D1;">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="card-title text-black">Kegiatan:</h3>
-            <a href="{{ route('kegiatan.create') }}" class="btn btn-primary">Create New Kegiatan</a>
+            <h3 class="card-title text-black">iuran:</h3>
+            <a href="{{ route('iuran.create') }}" class="btn btn-primary">Create New iuran</a>
         </div>
         <div class="col grid-margin stretch-card">
             <div class="card" style="background-color: #2A2A2A;">
@@ -17,35 +17,33 @@
                         <thead>
                             <tr style="background-color: #D1D1D1;">
                                 <th style="color: black;">No</th>
-                                <th style="color: black;">Nama Kegiatan</th>
-                                <th style="color: black;">Tanggal Kegiatan</th>
-                                <th style="color: black;">Waktu Kegiatan</th>
-                                <th style="color: black;">Lokasi Kegiatan</th>
+                                <th style="color: black;">Bulan</th>
+                                <th style="color: black;">Jumlah</th>
+                                <th style="color: black;">Keterangan</th>
                                 <th style="color: black;">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($kegiatan as $item)
-                            <tr onclick="location.href='{{ route('kegiatan.show', $item->id) }}'" style="cursor: pointer;">
+                            @foreach ($iuran as $item)
+                            <tr onclick="location.href='{{ route('iuran.show', $item->id) }}'" style="cursor: pointer;">
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $item->nama_kegiatan }}</td>
-                                <td>{{ $item->tanggal_kegiatan }}</td>
-                                <td>{{ $item->waktu_kegiatan }}</td>
-                                <td>{{ $item->lokasi_kegiatan }}</td>
+                                <td>{{ $item->bulan }}</td>
+                                <td>{{ $item->jumlah }}</td>
+                                <td>{{ $item->keterangan }}</td>
                                 <td>
-                                    <a href="{{ route('kegiatan.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                    <form action="{{ route('kegiatan.destroy', $item->id) }}" method="POST" style="display: inline-block;">
+                                    <a href="{{ route('iuran.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                    <form action="{{ route('iuran.destroy', $item->id) }}" method="POST" style="display: inline-block;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus kegiatan ini?')">Delete</button>
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus iuran ini?')">Delete</button>
                                     </form>
                                 </td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
-                    @if($kegiatan->isEmpty())
-                    <p class="text-center text-muted mt-3">Tidak ada kegiatan yang tersedia.</p>
+                    @if($iuran->isEmpty())
+                    <p class="text-center text-muted mt-3">Tidak ada iuran yang tersedia.</p>
                     @endif
                 </div>
             </div>
@@ -53,7 +51,7 @@
 
         <!-- Pagination -->
         <div class="d-flex justify-content-center mt-4">
-            {{ $kegiatan->links('pagination::bootstrap-4') }}
+            {{ $iuran->links('pagination::bootstrap-4') }}
         </div>
     </div>
 
