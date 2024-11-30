@@ -62,7 +62,7 @@
             <span class="nav-link">Navigation</span>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="index.html">
+            <a class="nav-link" href="/">
               <span class="menu-icon">
                 <i class="mdi mdi-speedometer"></i>
               </span>
@@ -81,6 +81,7 @@
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" href="/anggota">Daftar Anggota </a></li>
                 <li class="nav-item"> <a class="nav-link" href="/pengurus">Pengurus</a></li>
+                <li class="nav-item"> <a class="nav-link" href="/jabatan">Jabatan</a></li>
                 <li class="nav-item"> <a class="nav-link" href="/usaha-anggota">Usaha Anggota</a></li>
               </ul>
             </div>

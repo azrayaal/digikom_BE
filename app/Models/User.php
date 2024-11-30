@@ -21,6 +21,9 @@ class User extends Authenticatable
         'full_name',
         'email',
         'password',
+        'profile_picture',
+        'phone_number',
+        'jabatan_id',
     ];
 
     /**
@@ -41,8 +44,13 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
+            // 'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function creator()
+    {
+        return $this->belongsTo(Jabatan::class, 'jabatan_id');
+        // return $this->belongsTo(Admin::class, 'created_by');
     }
 }
