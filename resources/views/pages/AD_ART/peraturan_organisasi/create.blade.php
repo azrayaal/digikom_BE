@@ -14,26 +14,21 @@
 @endif
     <div class="content-wrapper" style="background-color: #D1D1D1;">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="card-title text-black">Buat Anggaran Dasar Baru</h3>
+            <h3 class="card-title text-black">Buat Peraturan Organisasi Baru</h3>
             <div class="mb-3">
-                <button onclick="window.location.href='{{ route('anggaran-dasar.index') }}'" class="btn btn-primary">
-                    ← Kembali ke Daftar Anggaran Dasar
+                <button onclick="window.location.href='{{ route('peraturan-organisasi.index') }}'" class="btn btn-primary">
+                    ← Kembali ke Daftar Peraturan Organisasi
                 </button>
             </div>
         </div>
         <div class="col grid-margin stretch-card">
             <div class="card" style="background-color: #2A2A2A;">
                 <div class="card-body">
-                <form action="{{ route('anggaran-dasar.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('peraturan-organisasi.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
-                        <label for="judul_utama" class="text-white" style="font-weight: bold;">Judul</label>
-                        <input type="text" class="form-control text-white" name="judul_utama" id="judul_utama" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="sub_judul" class="text-white" style="font-weight: bold;">Sub Judul</label>
-                        <input type="text" class="form-control text-white" name="sub_judul" id="sub_judul" required>
+                        <label for="judul" class="text-white" style="font-weight: bold;">Judul</label>
+                        <input type="text" class="form-control text-white" name="judul" id="judul" required>
                     </div>
 
                     <div class="form-group">
@@ -41,7 +36,7 @@
                         <textarea class="form-control text-white" name="deskripsi" id="deskripsi" rows="5" required></textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Simpan Anggaran Dasar</button>
+                    <button type="submit" class="btn btn-primary">Simpan Peraturan Organisasi</button>
                 </form>
                 </div>
             </div>

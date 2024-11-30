@@ -5,123 +5,97 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
 //import model product
-use App\Models\Berita; 
+use App\Models\PeraturanOrganisasi; 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
 //import return type View
 use Illuminate\View\View;
 
-class PeraturanOrganisasiController extends Controller
+class PeraturanOrganisasiController  extends Controller
 {
     public function index(Request $request) : View
     {
         $search = $request->input('search');
-        $sortBy = $request->input('sort_by', 'tittle'); // Default sort by 'bulan'
+        $sortBy = $request->input('sort_by', 'judul'); // Default sort by 'judul'
         $order = $request->input('order', 'asc'); // Default order 'asc'
         $perPage = $request->input('per_page', 10);
         // Query dengan pencarian dan pengurutan
-        $berita = Berita::when($search, function ($query, $search) {
-                return $query->where('tittle', 'like', "%{$search}%");
+        $peraturan_organisasi = PeraturanOrganisasi::when($search, function ($query, $search) {
+                return $query->where('judul', 'like', "%{$search}%");
             })
             ->orderBy($sortBy, $order)
             ->paginate($perPage);
     
-        return view('pages.berita.index', compact('berita', 'search', 'sortBy', 'order'));
+        return view('pages.AD_ART.peraturan_organisasi.index', compact('peraturan_organisasi', 'search', 'sortBy', 'order'));
     }
 
 
     public function show($id)
     {
-        $berita = Berita::with('creator')->findOrFail($id); // Ambil berita berdasarkan ID
-        return view('pages.berita.show', compact('berita'));
+        $peraturan_organisasi = PeraturanOrganisasi::with('creator')->findOrFail($id); // Ambil peraturan_organisasi berdasarkan ID
+        return view('pages.AD_ART.peraturan_organisasi.show', compact('peraturan_organisasi'));
     }
 
-     // Menampilkan form untuk membuat berita baru
+     // Menampilkan form untuk membuat peraturan_organisasi baru
     public function create()
     {
-        return view('pages.berita.create');
+        return view('pages.AD_ART.peraturan_organisasi.create');
     }
 
-     // Menyimpan berita baru
+     // Menyimpan peraturan_organisasi baru
     public function store(Request $request)
     {
          // Validasi input
         $request->validate([
-            'tittle' => 'required|unique:beritas,tittle',
-            'banner' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'content' => 'required',
+            'judul' => 'required|unique:peraturan_organisasis,judul',
+            'deskripsi' => 'required',
         ]);
 
-         // Menyimpan data berita ke database
-        $berita = new Berita;
-        $berita->tittle = $request->tittle;
-        $berita->content = $request->content;
-        //  $berita->created_by = auth()->id();  // Menyimpan ID admin yang membuat berita
-        $berita->created_by = 1;  
-
-         // Menyimpan banner gambar jika ada
-        if ($request->hasFile('banner')) {
-            $imagePath = $request->file('banner')->store('public/berita');
-            $berita->banner = basename($imagePath);
-        }
-
-        $berita->save();
-
+         // Menyimpan data peraturan_organisasi ke database
+        $peraturan_organisasi = new PeraturanOrganisasi;
+        $peraturan_organisasi->judul = $request->judul;
+        $peraturan_organisasi->deskripsi = $request->deskripsi;
+        //  $peraturan_organisasi->created_by = auth()->id();  // Menyimpan ID admin yang membuat peraturan_organisasi
+        $peraturan_organisasi->created_by = 1;  
+        $peraturan_organisasi->save();
          // Redirect setelah berhasil menyimpan
-        return redirect()->route('berita.index')->with('success', 'Berita berhasil dibuat!');
+        return redirect()->route('peraturan-organisasi.index')->with('success', 'Anggaran Dasar berhasil dibuat!');
     }
 
     public function edit($id)
     {
-        $berita = Berita::findOrFail($id); // Ambil berita berdasarkan ID
-        return view('pages.berita.edit', compact('berita'));
+        $peraturan_organisasi = PeraturanOrganisasi::findOrFail($id); // Ambil peraturan_organisasi berdasarkan ID
+        return view('pages.AD_ART.peraturan_organisasi.edit', compact('peraturan_organisasi'));
     }
 
     public function update(Request $request, $id)
 {
     // Validasi input
     $request->validate([
-        'tittle' => 'required|max:255',
-        'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        'content' => 'required',
+        'judul' => 'required',
+        'deskripsi' => 'required',
     ]);
 
-    // Cari berita berdasarkan ID
-    $berita = Berita::findOrFail($id);
+    // Cari peraturan_organisasi berdasarkan ID
+    $peraturan_organisasi = PeraturanOrganisasi::findOrFail($id);
 
-    // Update data berita
-    $berita->tittle = $request->tittle;
-    $berita->content = $request->content;
+    // Update data peraturan_organisasi
+    $peraturan_organisasi->judul = $request->judul;
+    $peraturan_organisasi->deskripsi = $request->deskripsi;
 
-    // Update banner jika ada file baru
-    if ($request->hasFile('banner')) {
-        // Hapus banner lama
-        if ($berita->banner) {
-            Storage::delete('public/berita/' . $berita->banner);
-        }
-        // Simpan banner baru
-        $imagePath = $request->file('banner')->store('public/berita');
-        $berita->banner = basename($imagePath);
-    }
+    $peraturan_organisasi->created_by = 1;
+    $peraturan_organisasi->save();
 
-    $berita->save();
-
-    return redirect()->route('berita.index')->with('success', 'Berita berhasil diperbarui!');
+    return redirect()->route('peraturan-organisasi.index')->with('success', 'Anggaran Dasar berhasil diperbarui!');
 }
 
     public function destroy($id)
     {
-        $berita = Berita::findOrFail($id); // Ambil berita berdasarkan ID
+        $peraturan_organisasi = PeraturanOrganisasi::findOrFail($id); // Ambil peraturan_organisasi berdasarkan ID
 
-        // Hapus banner dari storage jika ada
-        if ($berita->banner) {
-            Storage::delete('public/berita/' . $berita->banner);
-        }
+        $peraturan_organisasi->delete(); // Hapus data peraturan_organisasi
 
-        $berita->delete(); // Hapus data berita
-
-        return redirect()->route('berita.index')->with('success', 'Berita berhasil dihapus!');
+        return redirect()->route('peraturan-organisasi.index')->with('success', 'peraturan_organisasi berhasil dihapus!');
     }
-
 }

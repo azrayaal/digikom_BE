@@ -58,7 +58,7 @@
                     </tbody>
                 </table>
                 @if($anggaran_dasar->isEmpty())
-                <p class="text-center text-muted mt-3">Tidak ada anggaran_dasar yang tersedia.</p>
+                <p class="text-center text-muted mt-3">Tidak ada Anggaran Tersedia yang tersedia.</p>
                 @endif
                 </div>
             </div>

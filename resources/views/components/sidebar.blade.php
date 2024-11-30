@@ -109,22 +109,57 @@
               <span class="menu-title">Berita</span>
             </a>
           </li>
- 
           <li class="nav-item menu-items">
-            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-              <span class="menu-icon">
-                <i class="mdi mdi-playlist-play"></i>
-              </span>
-              <span class="menu-title">AD ART</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="ui-basic">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="/anggaran-dasar">Anggaran Dasar</a></li>
-                <li class="nav-item"> <a class="nav-link" href="/anggaran-rumah-tangga">Anggaran Rumah Tangga</a></li>
-                <li class="nav-item"> <a class="nav-link" href="/peraturan-organisasi">Peraturan Organisasi</a></li>
-              </ul>
-            </div>
+              <a class="nav-link" data-toggle="collapse" href="#ad_art" aria-expanded="false" aria-controls="ad_art">
+                  <span class="menu-icon">
+                      <i class="mdi mdi-playlist-play"></i>
+                  </span>
+                  <span class="menu-title">AD ART</span>
+                  <i class="menu-arrow"></i>
+              </a>
+              <div class="collapse" id="ad_art">
+                  <ul class="nav flex-column sub-menu">
+                      <li class="nav-item">
+                          <!-- Menggunakan rute Laravel untuk mengarahkan ke halaman baru -->
+                          <a class="nav-link" href="{{ route('anggaran-dasar.index') }}">Anggaran Dasar</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="{{ route('anggaran-rumah-tangga.index') }}">Anggaran Rumah Tangga</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="{{ route('peraturan-organisasi.index') }}">Peraturan Organisasi</a>
+                      </li>
+                  </ul>
+              </div>
           </li>
+
+
+
         </ul>
       </nav>
+
+
+      <script>
+    $(document).ready(function() {
+        // Cek apakah collapse sudah terbuka
+        if(localStorage.getItem('ad_art_open') === 'true') {
+            $('#ad_art').addClass('show');
+        }
+
+        // Simpan status collapse di localStorage saat menu diklik
+        $('#auth').on('show.bs.collapse', function() {
+            localStorage.setItem('ad_art_open', 'true');
+        });
+
+        $('#auth').on('hide.bs.collapse', function() {
+            localStorage.setItem('ad_art_open', 'false');
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        if(window.location.href.indexOf("anggaran-dasar") !== -1) {
+            $('#ad_art').addClass('show');
+        }
+    });
+</script>
