@@ -12,8 +12,6 @@ class IndexController extends Controller
 {
     public function index() : View
     {
-
-
         //render view with products
         return view('index');
     }
