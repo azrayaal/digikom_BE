@@ -51,11 +51,13 @@ class JabatanController extends Controller
          // Validasi input
         $request->validate([
             'nama_jabatan' => 'required|unique:jabatans,nama_jabatan',
+            'deskripsi' => 'required',
         ]);
 
          // Menyimpan data jabatan ke database
         $jabatan = new Jabatan;
         $jabatan->nama_jabatan = $request->nama_jabatan;
+        $jabatan->deskripsi = $request->deskripsi;
         $jabatan->save();
          // Redirect setelah berhasil menyimpan
         return redirect()->route('jabatan.index')->with('success', 'Jabatan berhasil dibuat!');
@@ -73,6 +75,7 @@ class JabatanController extends Controller
     // Validasi input
     $request->validate([
         'nama_jabatan' => 'required',
+        'deskripsi' => 'required',
     ]);
 
     // Cari jabatan berdasarkan ID
@@ -80,6 +83,7 @@ class JabatanController extends Controller
 
     // Update data jabatan
     $jabatan->nama_jabatan = $request->nama_jabatan;
+    $jabatan->deskripsi = $request->deskripsi;
     $jabatan->save();
 
     return redirect()->route('jabatan.index')->with('success', 'Jabatan berhasil diperbarui!');

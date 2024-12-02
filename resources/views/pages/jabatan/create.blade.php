@@ -20,6 +20,10 @@
                         <label for="nama_jabatan" class="text-white" style="font-weight: bold;">Nama Jabatan</label>
                         <input type="text" class="form-control text-white" name="nama_jabatan" id="nama_jabatan" required>
                     </div>
+                    <div class="form-group">
+                            <label for="deskripsi" class="text-white">Deskripsi</label>
+                            <textarea class="form-control text-white" name="deskripsi" id="deskripsi" rows="5" required></textarea>
+                    </div>
 
                     <!-- <div class="form-group">
                         <label for="keterangan" class="text-white" style="font-weight: bold;">keterangan</label>

@@ -14,7 +14,7 @@ class Jabatan extends Model
      *
      * @var array
      */
-    protected $fillable = ['nama_jabatan'];
+    protected $fillable = ['nama_jabatan', 'deskripsi'];
     protected $casts = [
         'created_at' => 'datetime', // Pastikan tanggal dikonversi ke objek Carbon
     ];

@@ -28,6 +28,15 @@
                             onfocus="this.style.backgroundColor='#2A3038'; this.style.color='#ffffff';"
                             required>
                         </div>
+                            <label for="deskripsi" class="text-white" style="font-weight: bold;">Deskripsi</label>
+                            <input  type="text"
+                            class="form-control"
+                            name="deskripsi"
+                            id="deskripsi"
+                            value="{{ $jabatan->deskripsi }}" 
+                            onfocus="this.style.backgroundColor='#2A3038'; this.style.color='#ffffff';"
+                            required>
+                        </div>
 
                         <!-- <div class="form-group">
                             <label for="keterangan" class="text-white" style="font-weight: bold;">Keterangan</label>

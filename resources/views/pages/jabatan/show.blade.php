@@ -25,12 +25,12 @@
                         <p class="text-white"><strong>Nama Jabatan:</strong> {{ $jabatan->nama_jabatan }}</p>
                     </div>
                     <!-- Deskripsi -->
-                    <!-- <div class="col-md-8">
+                    <div class="col-md-8">
                         <h5 class="text-muted fw-bold">Deskripsi</h5>
                         <div class="text-white">
-                            {!! $jabatan->deskripsi_jabatan !!}
+                            {!! $jabatan->deskripsi !!}
                         </div>
-                    </div> -->
+                    </div>
                 </div>
             </div>
         </div>
