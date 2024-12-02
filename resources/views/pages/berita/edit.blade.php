@@ -12,7 +12,15 @@
                 </button>
             </div>
         </div>
-
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li style="color: red;">{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="col grid-margin stretch-card">
             <div class="card" style="background-color: #2A2A2A;">
                 <div class="card-body">

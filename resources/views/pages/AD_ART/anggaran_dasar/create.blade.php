@@ -3,15 +3,6 @@
 @include('components.navbar')
 
 <div class="main-panel">
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li style="color: red;">{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
     <div class="content-wrapper" style="background-color: #D1D1D1;">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h3 class="card-title text-black">Buat Anggaran Dasar Baru</h3>
@@ -21,6 +12,15 @@
                 </button>
             </div>
         </div>
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li style="color: red;">{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="col grid-margin stretch-card">
             <div class="card" style="background-color: #2A2A2A;">
                 <div class="card-body">
