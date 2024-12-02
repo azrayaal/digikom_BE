@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
 Route::middleware(['auth:admin'])->group(function () {
-    Route::resource('/dashboard', \App\Http\Controllers\IndexController::class);
+    Route::resource('/', \App\Http\Controllers\IndexController::class);
     Route::resource('/iuran', \App\Http\Controllers\IuranController::class);
     Route::resource('/berita', \App\Http\Controllers\BeritaController::class);
     Route::resource('/kegiatan', \App\Http\Controllers\KegiatanController::class);

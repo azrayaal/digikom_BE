@@ -25,7 +25,7 @@ class AuthController extends Controller
         // Attempt to login via guard admin
         if (Auth::guard('admin')->attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/dashboard'); // Arahkan ke dashboard
+            return redirect()->intended('/'); // Arahkan ke dashboard
         }
 
         return back()->withErrors([

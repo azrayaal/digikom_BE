@@ -3,12 +3,12 @@
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
         <div class="">
-            <a class="sidebar-brand brand-logo" href="{{ route('dashboard.index') }}">
+            <a class="sidebar-brand brand-logo" href="/">
                 <img src="{{ asset('assets/digikomLogo.png') }}" alt="logo" style="width: 50px; height: 50px;" />
             </a>
-        </div>
+        </div>  
         <div class="">
-            <a class="sidebar-brand brand-logo-mini" href="{{ route('dashboard.index') }}">
+            <a class="sidebar-brand brand-logo-mini" href="/">
                 <img src="{{ asset('assets/digikomLogo.png') }}" alt="logo" style="width: 50px; height: 50px" />
             </a>
         </div>
@@ -39,7 +39,7 @@
         
         <!-- Dashboard -->
         <li class="nav-item menu-items">
-            <a class="nav-link {{ request()->is('dashboard*') ? 'active' : '' }}" href="{{ route('dashboard.index') }}">
+            <a class="nav-link {{ request()->is('dashboard*') ? 'active' : '' }}" href="/">
                 <span class="menu-icon">
                     <i class="mdi mdi-speedometer"></i>
                 </span>
