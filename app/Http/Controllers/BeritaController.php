@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 //import model product
 use App\Models\Berita; 
@@ -57,8 +59,7 @@ class BeritaController extends Controller
         $berita = new Berita;
         $berita->tittle = $request->tittle;
         $berita->content = $request->content;
-        //  $berita->created_by = auth()->id();  // Menyimpan ID admin yang membuat berita
-        $berita->created_by = 1;  
+        $berita->created_by = Auth::guard('admin')->user()->id; 
 
          // Menyimpan banner gambar jika ada
         if ($request->hasFile('banner')) {

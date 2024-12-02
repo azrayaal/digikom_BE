@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 //import model product
 use App\Models\AnggaranDasar; 
@@ -58,8 +58,7 @@ class AnggaranDasarController extends Controller
         $anggaran_dasar->judul_utama = $request->judul_utama;
         $anggaran_dasar->sub_judul = $request->sub_judul;
         $anggaran_dasar->deskripsi = $request->deskripsi;
-        //  $anggaran_dasar->created_by = auth()->id();  // Menyimpan ID admin yang membuat anggaran_dasar
-        $anggaran_dasar->created_by = 1;  
+        $anggaran_dasar->created_by = Auth::guard('admin')->user()->id; 
         $anggaran_dasar->save();
          // Redirect setelah berhasil menyimpan
         return redirect()->route('anggaran-dasar.index')->with('success', 'Anggaran Dasar berhasil dibuat!');
@@ -89,7 +88,7 @@ class AnggaranDasarController extends Controller
     $anggaran_dasar->sub_judul = $request->sub_judul;
     $anggaran_dasar->deskripsi = $request->deskripsi;
 
-    $anggaran_dasar->created_by = 1;
+    $anggaran_dasar->created_by = Auth::guard('admin')->user()->id; 
     $anggaran_dasar->save();
 
     return redirect()->route('anggaran-dasar.index')->with('success', 'Anggaran Dasar berhasil diperbarui!');

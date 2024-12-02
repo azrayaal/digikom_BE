@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 //import model product
 use App\Models\Jabatan; 
@@ -55,7 +56,6 @@ class JabatanController extends Controller
          // Menyimpan data jabatan ke database
         $jabatan = new Jabatan;
         $jabatan->nama_jabatan = $request->nama_jabatan;
-        //  $jabatan->created_by = auth()->id();  // Menyimpan ID admin yang membuat jabatan
         $jabatan->save();
          // Redirect setelah berhasil menyimpan
         return redirect()->route('jabatan.index')->with('success', 'Jabatan berhasil dibuat!');

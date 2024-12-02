@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 //import model product
 use App\Models\Iuran; 
@@ -60,8 +61,7 @@ class IuranController extends Controller
         $iuran->bulan = $request->bulan;
         $iuran->jumlah = $request->jumlah;
         $iuran->keterangan = $request->keterangan;
-        //  $iuran->created_by = auth()->id();  // Menyimpan ID admin yang membuat iuran
-        $iuran->created_by = 1;  
+        $iuran->created_by = Auth::guard('admin')->user()->id; 
         $iuran->save();
          // Redirect setelah berhasil menyimpan
         return redirect()->route('iuran.index')->with('success', 'Iuran berhasil dibuat!');
@@ -88,8 +88,7 @@ class IuranController extends Controller
             $iuran->bulan = $request->bulan;
             $iuran->jumlah = $request->jumlah;
             $iuran->keterangan = $request->keterangan;
-            //  $iuran->created_by = auth()->id();  // Menyimpan ID admin yang membuat iuran
-            $iuran->created_by = 1;  
+            $iuran->created_by = Auth::guard('admin')->user()->id; 
             $iuran->save();
 
         return redirect()->route('iuran.index')->with('success', 'Iuran berhasil diperbarui!');

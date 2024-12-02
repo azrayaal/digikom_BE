@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 //import model product
 use App\Models\PeraturanOrganisasi; 
@@ -56,8 +57,7 @@ class PeraturanOrganisasiController  extends Controller
         $peraturan_organisasi = new PeraturanOrganisasi;
         $peraturan_organisasi->judul = $request->judul;
         $peraturan_organisasi->deskripsi = $request->deskripsi;
-        //  $peraturan_organisasi->created_by = auth()->id();  // Menyimpan ID admin yang membuat peraturan_organisasi
-        $peraturan_organisasi->created_by = 1;  
+        $peraturan_organisasi->created_by = Auth::guard('admin')->user()->id; 
         $peraturan_organisasi->save();
          // Redirect setelah berhasil menyimpan
         return redirect()->route('peraturan-organisasi.index')->with('success', 'Anggaran Dasar berhasil dibuat!');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 //import model product
 use App\Models\Kegiatan; 
@@ -62,8 +63,7 @@ class KegiatanController extends Controller
         $kegiatan->waktu_kegiatan = $request->waktu_kegiatan;
         $kegiatan->lokasi_kegiatan = $request->lokasi_kegiatan;
         $kegiatan->deskripsi_kegiatan = $request->deskripsi_kegiatan;
-        //  $kegiatan->created_by = auth()->id();  // Menyimpan ID admin yang membuat kegiatan
-        $kegiatan->created_by = 1;  
+        $kegiatan->created_by = Auth::guard('admin')->user()->id; 
         $kegiatan->save();
          // Redirect setelah berhasil menyimpan
         return redirect()->route('kegiatan.index')->with('success', 'Kegiatan berhasil dibuat!');

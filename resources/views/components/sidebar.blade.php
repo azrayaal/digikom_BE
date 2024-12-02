@@ -23,8 +23,7 @@
                         <span class="count bg-success"></span>
                     </div>
                     <div class="profile-name">
-                        <h5 class="mb-0 font-weight-normal">Henry Klein</h5>
-                        <span>Gold Member</span>
+                        <h5 class="mb-0 font-weight-normal">{{ Auth::guard('admin')->user()->full_name }}</h5>
                     </div>
                 </div>
                 <a href="#" id="profile-dropdown" data-toggle="dropdown">

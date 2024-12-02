@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Jabatan; 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 //import return type View
 use Illuminate\View\View;
@@ -52,10 +53,10 @@ class UserController extends Controller
         $request->validate([
             'full_name' => 'required|unique:users,full_name',
             'email' => 'required|unique:users,email',
-             'password' => 'required|min:8',  // Menambahkan aturan minimal panjang password
-             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Mengubah 'imge' menjadi 'image' dan menambahkan nullable
+            'password' => 'required|min:8',  // Menambahkan aturan minimal panjang password
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Mengubah 'imge' menjadi 'image' dan menambahkan nullable
             'phone_number' => 'required',
-             'jabatan_id' => 'required|exists:jabatans,id', // Memastikan jabatan_id valid
+            'jabatan_id' => 'required|exists:jabatans,id', // Memastikan jabatan_id valid
         ]);
     
          // Menyimpan data user ke database

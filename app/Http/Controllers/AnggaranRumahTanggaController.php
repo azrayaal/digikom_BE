@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\AnggaranRumahTangga; 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 //import return type View
 use Illuminate\View\View;
@@ -58,8 +59,7 @@ class AnggaranRumahTanggaController extends Controller
         $anggaran_rumah_tangga->judul_utama = $request->judul_utama;
         $anggaran_rumah_tangga->sub_judul = $request->sub_judul;
         $anggaran_rumah_tangga->deskripsi = $request->deskripsi;
-        //  $anggaran_rumah_tangga->created_by = auth()->id();  // Menyimpan ID admin yang membuat anggaran_rumah_tangga
-        $anggaran_rumah_tangga->created_by = 1;  
+        $anggaran_rumah_tangga->created_by = Auth::guard('admin')->user()->id; 
         $anggaran_rumah_tangga->save();
          // Redirect setelah berhasil menyimpan
         return redirect()->route('anggaran-rumah-tangga.index')->with('success', 'Anggaran Dasar berhasil dibuat!');
@@ -89,7 +89,7 @@ class AnggaranRumahTanggaController extends Controller
     $anggaran_rumah_tangga->sub_judul = $request->sub_judul;
     $anggaran_rumah_tangga->deskripsi = $request->deskripsi;
 
-    $anggaran_rumah_tangga->created_by = 1;
+    $anggaran_rumah_tangga->created_by = Auth::guard('admin')->user()->id; 
     $anggaran_rumah_tangga->save();
 
     return redirect()->route('anggaran-rumah-tangga.index')->with('success', 'Anggaran Dasar berhasil diperbarui!');
