@@ -14,8 +14,8 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::resource('/jabatan', \App\Http\Controllers\JabatanController::class);
 
     Route::resource('/anggota', \App\Http\Controllers\UserController::class);
-    Route::resource('/pengurus', \App\Http\Controllers\JabatanController::class);
-    Route::resource('/usaha-anggota', \App\Http\Controllers\JabatanController::class);
+    Route::resource('/pengurus', \App\Http\Controllers\PengurusController::class);
+    Route::resource('/usaha', \App\Http\Controllers\UsahaController::class);
 });
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');

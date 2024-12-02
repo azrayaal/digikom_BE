@@ -20,7 +20,7 @@
     <!-- Layout styles -->
     <link rel="stylesheet" href="{{ asset('templateViews/template/assets/css/style.css') }}">
     <!-- End layout styles -->
-    <link rel="shortcut icon" href="{{ asset('templateViews/template/assets/images/favicon.png') }}" />
+    <link rel="shortcut icon" href={{ asset('assets/digikomLogo.png')}} />
   </head>
   <body>
     <div class="container-scroller">

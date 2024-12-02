@@ -20,7 +20,7 @@ class UserController extends Controller
     {
         // Ambil input untuk search dan sort
         $search = $request->input('search');
-        $sortBy = $request->input('sort_by', 'full_name'); // Default sort by 'bulan'
+        $sortBy = $request->input('sort_by', 'full_name'); // Default sort by 'full_name'
         $order = $request->input('order', 'asc'); // Default order 'asc'
         $perPage = $request->input('per_page', 10);
         // Query dengan pencarian dan pengurutan
@@ -43,7 +43,7 @@ class UserController extends Controller
     public function create()
     { 
             $jabatans = Jabatan::all();
-            return view('pages.user.create', compact('jabatans'));
+            return view('pages.user.create', compact(var_name: 'jabatans'));
     }
 
      // Menyimpan user baru
