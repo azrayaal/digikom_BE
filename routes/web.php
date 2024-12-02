@@ -21,3 +21,12 @@ Route::middleware(['auth:admin'])->group(function () {
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/test-log', function () {
+    try {
+        \Log::info('Test log entry');
+        return 'Log successfully written!';
+    } catch (\Exception $e) {
+        return $e->getMessage();
+    }
+});
+

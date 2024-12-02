@@ -29,10 +29,13 @@
                             <label for="tittle" class="text-white">Judul Berita</label>
                             <input type="text" class="form-control text-white" name="tittle" id="tittle" required>
                         </div>
-
+                        
                         <div class="form-group">
                             <label for="banner" class="text-white">Gambar Banner</label>
                             <input type="file" class="form-control" name="banner" id="banner" required>
+                            @error('banner')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
 
                         <div class="form-group">

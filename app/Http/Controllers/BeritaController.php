@@ -66,7 +66,6 @@ class BeritaController extends Controller
             $imagePath = $request->file('banner')->store('public/berita');
             $berita->banner = basename($imagePath);
         }
-
         $berita->save();
 
          // Redirect setelah berhasil menyimpan
