@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class IuranResource extends JsonResource
+class AnggaranDasarResource extends JsonResource
 {
     //define properti
 public $status;
@@ -27,13 +27,14 @@ public function __construct($status, $message, $resource)
             'success'   => $this->status,
             'message'   => $this->message,
             // 'data'      => $this->resource
-            'data' => $this->resource->map(function ($iuran) {
+            'data' => $this->resource->map(function ($kegiatan) {
                 return [
-                    'id' => $iuran->id,
-                    'bulan' => $iuran->bulan,
-                    'jumlah' => $iuran->jumlah,
-                    'keterangan' => $iuran->keterangan,
-                    'created_at' => $iuran->created_at,
+                    'id' => $kegiatan->id,
+                    'judul_utama' => $kegiatan->judul_utama,
+                    'sub_judul' => $kegiatan->sub_judul,
+                    'deskripsi' => $kegiatan->deskripsi,
+                    'created_by' => $kegiatan->creator ? $kegiatan->creator->full_name : null,
+                    'created_at' => $kegiatan->created_at,
                 ];
             }),
             'pagination' => [
@@ -55,10 +56,11 @@ public function __construct($status, $message, $resource)
             'message' => $this->message,
             'data' => [
                 'id' => $this->resource->id,
-                    'bulan' => $this->resource->bulan,
-                    'jumlah' => $this->resource->jumlah,
-                    'keterangan' => $this->resource->keterangan,
-                    'created_at' => $this->resource->created_at,
+                'judul_utama' => $this->resource->judul_utama,
+                'sub_judul' => $this->resource->sub_judul,
+                'deskripsi' => $this->resource->deskripsi,
+                'create_at' => $this->resource->create_at,
+                'created_by' => $this->resource->creator ? $this->resource->creator->full_name : null,
             ],
         ];
     }

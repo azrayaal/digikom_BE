@@ -19,40 +19,21 @@ class BeritaController extends Controller
         return new BeritaResource(true, 'List Data Berita', $beritas);
     }
 
-    public function store(Request $request)
+    public function show($id)
     {
-        //define validation rules
-        $validator = Validator::make($request->all(), [
-            'banner'     => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'tittle'     => 'required|unique:beritas,tittle',
-            'content'   => 'required',
-            'created_by' => 'required|exists:users,id',
-        ]);
+        // Mencari berita berdasarkan ID
+        $berita = Berita::with('creator')->find($id);
 
-        //check if validation fails
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+        // Jika berita tidak ditemukan, return response error
+        if (!$berita) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Berita tidak ditemukan',
+            ], 404);
         }
 
-         // Upload image
-    if ($request->hasFile('banner')) {
-        $image = $request->file('banner');
-        $imagePath = $image->storeAs('public/berita', $image->hashName());
-
-        \Log::info('Image Path: ' . $imagePath);
-        \Log::info('Log test successful.');
-
+        // Return data berita
+        return new BeritaResource(true, 'Detail Data Berita', $berita);
     }
 
-        //create post
-        $berita = Berita::create([
-            'banner'     => $image->hashName(),
-            'tittle'     => $request->tittle,
-            'content'   => $request->content,
-            'created_by' => $request->created_by,
-        ]);
-
-        //return response
-        return new BeritaResource(true, 'Data Post Berhasil Ditambahkan!', $berita);
-    }
 }

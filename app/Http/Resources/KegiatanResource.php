@@ -36,6 +36,7 @@ public function __construct($status, $message, $resource)
                     'lokasi_kegiatan' => $kegiatan->lokasi_kegiatan,
                     'deskripsi_kegiatan' => $kegiatan->deskripsi_kegiatan,
                     'created_by' => $kegiatan->creator ? $kegiatan->creator->full_name : null,
+                    'created_at' => $kegiatan->created_at,
                 ];
             }),
             'pagination' => [
@@ -57,10 +58,13 @@ public function __construct($status, $message, $resource)
             'message' => $this->message,
             'data' => [
                 'id' => $this->resource->id,
-                'tittle' => $this->resource->tittle,
-                'banner' => $this->resource->banner,
-                'content' => $this->resource->content,
+                'nama_kegiatan' => $this->resource->nama_kegiatan,
+                'tanggal_kegiatan' => $this->resource->tanggal_kegiatan,
+                'waktu_kegiatan' => $this->resource->waktu_kegiatan,
+                'lokasi_kegiatan' => $this->resource->lokasi_kegiatan,
+                'deskripsi_kegiatan' => $this->resource->deskripsi_kegiatan,
                 'created_by' => $this->resource->creator ? $this->resource->creator->full_name : null,
+                'created_at' => $this->resource->created_at,
             ],
         ];
     }

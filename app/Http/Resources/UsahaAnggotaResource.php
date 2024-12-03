@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class IuranResource extends JsonResource
+class UsahaAnggotaResource extends JsonResource
 {
     //define properti
 public $status;
@@ -27,13 +27,16 @@ public function __construct($status, $message, $resource)
             'success'   => $this->status,
             'message'   => $this->message,
             // 'data'      => $this->resource
-            'data' => $this->resource->map(function ($iuran) {
+            'data' => $this->resource->map(function ($usaha) {
                 return [
-                    'id' => $iuran->id,
-                    'bulan' => $iuran->bulan,
-                    'jumlah' => $iuran->jumlah,
-                    'keterangan' => $iuran->keterangan,
-                    'created_at' => $iuran->created_at,
+                    'id' => $usaha->id,
+                    'nama_usaha' => $usaha->nama_usaha,
+                    'waktu_operational' => $usaha->waktu_operational,
+                    'lokasi_usaha' => $usaha->lokasi_usaha,
+                    'nomor_usaha' => $usaha->nomor_usaha,
+                    'deskripsi' => $usaha->deskripsi,
+                    'owner' => $usaha->creator ? $usaha->creator->full_name : null,
+                    'created_at' => $usaha->created_at,
                 ];
             }),
             'pagination' => [
@@ -54,10 +57,13 @@ public function __construct($status, $message, $resource)
             'success' => $this->status,
             'message' => $this->message,
             'data' => [
-                'id' => $this->resource->id,
-                    'bulan' => $this->resource->bulan,
-                    'jumlah' => $this->resource->jumlah,
-                    'keterangan' => $this->resource->keterangan,
+               'id' => $this->resource->id,
+                    'nama_usaha' => $this->resource->nama_usaha,
+                    'waktu_operational' => $this->resource->waktu_operational,
+                    'lokasi_usaha' => $this->resource->lokasi_usaha,
+                    'nomor_usaha' => $this->resource->nomor_usaha,
+                    'deskripsi' => $this->resource->deskripsi,
+                    'owner' => $this->resource->creator ? $this->resource->creator->full_name : null,
                     'created_at' => $this->resource->created_at,
             ],
         ];

@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class IuranResource extends JsonResource
+class PengurusResource extends JsonResource
 {
     //define properti
 public $status;
@@ -27,13 +27,12 @@ public function __construct($status, $message, $resource)
             'success'   => $this->status,
             'message'   => $this->message,
             // 'data'      => $this->resource
-            'data' => $this->resource->map(function ($iuran) {
+            'data' => $this->resource->map(function ($pengurus) {
                 return [
-                    'id' => $iuran->id,
-                    'bulan' => $iuran->bulan,
-                    'jumlah' => $iuran->jumlah,
-                    'keterangan' => $iuran->keterangan,
-                    'created_at' => $iuran->created_at,
+                    'id' => $pengurus->id,
+                    'jabatan_pengurus' => $pengurus->jabatan ? $pengurus->jabatan->nama_jabatan : null,
+                    'nama_pengurus' => $pengurus->user ? $pengurus->user->full_name : null,
+                    'created_at' => $pengurus->created_at,
                 ];
             }),
             'pagination' => [
@@ -55,10 +54,9 @@ public function __construct($status, $message, $resource)
             'message' => $this->message,
             'data' => [
                 'id' => $this->resource->id,
-                    'bulan' => $this->resource->bulan,
-                    'jumlah' => $this->resource->jumlah,
-                    'keterangan' => $this->resource->keterangan,
-                    'created_at' => $this->resource->created_at,
+                'jabatan_pengurus' => $this->resource->jabatan ? $this->resource->jabatan->nama_jabatan : null,
+                'nama_pengurus' => $this->resource->user ? $this->resource->user->full_name : null,
+                'created_at' => $this->resource->created_at,
             ],
         ];
     }

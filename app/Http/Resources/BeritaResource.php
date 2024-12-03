@@ -34,6 +34,7 @@ public function __construct($status, $message, $resource)
                     'banner' => $berita->banner,
                     'content' => $berita->content,
                     'created_by' => $berita->creator ? $berita->creator->full_name : null,
+                    'created_at' => $berita->created_at,
                 ];
             }),
             'pagination' => [
@@ -59,6 +60,7 @@ public function __construct($status, $message, $resource)
                 'banner' => $this->resource->banner,
                 'content' => $this->resource->content,
                 'created_by' => $this->resource->creator ? $this->resource->creator->full_name : null,
+                'created_at' => $this->resource->created_at,
             ],
         ];
     }

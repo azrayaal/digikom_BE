@@ -6,7 +6,7 @@
             <a class="sidebar-brand brand-logo" href="/">
                 <img src="<?php echo e(asset('assets/digikomLogo.png')); ?>" alt="logo" style="width: 50px; height: 50px;" />
             </a>
-        </div>
+        </div>  
         <div class="">
             <a class="sidebar-brand brand-logo-mini" href="/">
                 <img src="<?php echo e(asset('assets/digikomLogo.png')); ?>" alt="logo" style="width: 50px; height: 50px" />
