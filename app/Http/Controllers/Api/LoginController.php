@@ -1,42 +1,100 @@
 <?php
-
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Facades\JWTAuth;
+
+// class LoginController extends Controller
+// {
+//     public function __invoke(Request $request)
+//     {
+//         // Validasi input
+//         $validator = Validator::make($request->all(), [
+//             'email'    => 'required|email',
+//             'password' => 'required'
+//         ]);
+
+//         // Jika validasi gagal
+//         if ($validator->fails()) {
+//             return response()->json([
+//                 'message' => 'Validasi gagal',
+//                 'errors'  => $validator->errors()
+//             ], 422);
+//         }
+
+//         // Kredensial login
+//         $credentials = $request->only('email', 'password');
+
+//         // Jika autentikasi gagal
+//         if (!$token = JWTAuth::attempt($credentials)) {
+//             return response()->json([
+//                 'message' => 'Email atau password salah'
+//             ], 401);
+//         }
+//         $user = auth()->user();
+//         // Jika autentikasi berhasil
+//         return response()->json([
+//             'message' => 'Login berhasil',
+//             'token'   => $token,
+//             'user'    => [
+//                 'email'           => $user->email,
+//                 'full_name'       => $user->full_name,
+//                 'profile_picture' => $user->profile_picture,
+//                 'phone_number'    => $user->phone_number,
+//                 'jabatan'         => $user->creator->nama_jabatan ?? null, // Pastikan relasi jabatan ada
+//             ]
+//         ], 200);
+//     }
+// }
 
 class LoginController extends Controller
 {
     public function __invoke(Request $request)
     {
-        //set validation
+        // Validasi input
         $validator = Validator::make($request->all(), [
-            'email'     => 'required',
-            'password'  => 'required'
+            'email'    => 'required|email',
+            'password' => 'required'
         ]);
 
-        //if validation fails
+        // Jika validasi gagal
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json([
+                'message' => 'Validasi gagal',
+                'errors'  => $validator->errors()
+            ], 422);
         }
 
-        //get credentials from request
+        // Kredensial login
         $credentials = $request->only('email', 'password');
 
-        //if auth failed
-        if(!$token = auth()->guard('api')->attempt($credentials)) {
+        // Jika autentikasi gagal
+        if (!$token = JWTAuth::attempt($credentials)) {
             return response()->json([
-                'success' => false,
-                'message' => 'Email atau Password Anda salah'
+                'message' => 'Email atau password salah'
             ], 401);
         }
 
-        //if auth success
+        // Ambil data user
+        $user = auth()->user();
+
+        // Tambahkan data user ke dalam token
+        $customClaims = [
+            'email'           => $user->email,
+            'full_name'       => $user->full_name,
+            'profile_picture' => $user->profile_picture,
+            'phone_number'    => $user->phone_number,
+            'jabatan'         => $user->creator->nama_jabatan ?? null,
+        ];
+
+        $token = JWTAuth::claims($customClaims)->attempt($credentials);
+
+        // Jika autentikasi berhasil
         return response()->json([
-            'success' => true,
-            'user'    => auth()->guard('api')->user(),    
-            'token'   => $token   
+            'message' => 'Login berhasil',
+            'token'   => $token
         ], 200);
     }
 }
