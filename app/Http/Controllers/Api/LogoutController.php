@@ -14,10 +14,12 @@ class LogoutController extends Controller
             JWTAuth::invalidate(JWTAuth::getToken());
 
             return response()->json([
+                'success' => true,
                 'message' => 'Logout berhasil!'
             ], 200);
         } catch (Exception $e) {
             return response()->json([
+                'success' => false,
                 'message' => 'Logout gagal. Token tidak valid.'
             ], 401);
         }

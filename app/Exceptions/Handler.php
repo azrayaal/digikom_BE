@@ -11,7 +11,7 @@ class Handler extends ExceptionHandler
     {
         // Tangani UnauthorizedHttpException
         if ($exception instanceof UnauthorizedHttpException) {
-            return response()->json(['message' => $exception->getMessage()], 401);
+            return response()->json(['success' => true, 'message' => $exception->getMessage() ], 401);
         }
     
         // Default behavior

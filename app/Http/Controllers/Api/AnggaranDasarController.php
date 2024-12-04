@@ -14,7 +14,7 @@ class AnggaranDasarController extends Controller
     {
         //get all posts
         // $anggaran_dasar = AnggaranDasar::latest()->paginate(5);
-        $anggaran_dasar = AnggaranDasar::with('creator')->latest()->paginate(5);
+        $anggaran_dasar = AnggaranDasar::with('creator')->get();
         //return collection of posts as a resource
         return new AnggaranDasarResource(true, 'List Data Anggaran Dasar', $anggaran_dasar);
     }

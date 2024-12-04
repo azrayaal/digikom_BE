@@ -14,7 +14,7 @@ class UsahaAnggotaController extends Controller
     {
         //get all posts
         // $usahas = Usaha::latest()->paginate(5);
-        $usahas = Usaha::with('creator')->latest()->paginate(5);
+        $usahas = Usaha::with('creator')->latest()->get();
         //return collection of posts as a resource
         return new UsahaAnggotaResource(true, 'List Data Usaha', $usahas);
     }

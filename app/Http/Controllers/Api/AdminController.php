@@ -12,7 +12,7 @@ class AdminController extends Controller
     public function index()
     {
         //get all posts
-        $admins = Admin::latest()->paginate(5);
+        $admins = Admin::latest()->get();
         //return collection of posts as a resource
         return new AdminResource(true, 'List Data Admin', $admins);
     }

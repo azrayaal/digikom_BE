@@ -37,18 +37,18 @@ public function __construct($status, $message, $resource)
                     'created_at' => $kegiatan->created_at,
                 ];
             }),
-            'pagination' => [
-                'current_page' => $this->resource->currentPage(),
-                'last_page' => $this->resource->lastPage(),
-                'per_page' => $this->resource->perPage(),
-                'total' => $this->resource->total(),
-                'links' => [
-                    'first' => $this->resource->url(1),
-                    'last' => $this->resource->url($this->resource->lastPage()),
-                    'next' => $this->resource->nextPageUrl(),
-                    'previous' => $this->resource->previousPageUrl(),
-                ],
-            ],
+            // 'pagination' => [
+            //     'current_page' => $this->resource->currentPage(),
+            //     'last_page' => $this->resource->lastPage(),
+            //     'per_page' => $this->resource->perPage(),
+            //     'total' => $this->resource->total(),
+            //     'links' => [
+            //         'first' => $this->resource->url(1),
+            //         'last' => $this->resource->url($this->resource->lastPage()),
+            //         'next' => $this->resource->nextPageUrl(),
+            //         'previous' => $this->resource->previousPageUrl(),
+            //     ],
+            // ],
         ];
     } else {
         return [

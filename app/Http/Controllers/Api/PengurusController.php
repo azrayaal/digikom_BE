@@ -14,7 +14,7 @@ class PengurusController extends Controller
     {
         //get all posts
         // $penguruses = Pengurus::latest()->paginate(5);
-        $penguruses = Pengurus::with('user', 'jabatan')->latest()->paginate(5);
+        $penguruses = Pengurus::with('user', 'jabatan')->latest()->get();
         //return collection of posts as a resource
         return new PengurusResource(true, 'List Data Pengurus', $penguruses);
     }

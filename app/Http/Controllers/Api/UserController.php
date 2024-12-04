@@ -12,7 +12,7 @@ class UserController extends Controller
     public function index()
     {
         //get all posts
-        $users = User::latest()->paginate(5);
+        $users = User::latest()->get();
 
         //return collection of posts as a resource
         return new UserResource(true, 'List Data Berita', $users);

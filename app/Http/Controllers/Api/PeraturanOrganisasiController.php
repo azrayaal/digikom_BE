@@ -14,7 +14,7 @@ class PeraturanOrganisasiController extends Controller
     {
         //get all posts
         // $peraturans = PeraturanOrganisasi::latest()->paginate(5);
-        $peraturans = PeraturanOrganisasi::with('creator')->latest()->paginate(5);
+        $peraturans = PeraturanOrganisasi::with('creator')->latest()->get();
         //return collection of posts as a resource
         return new PeraturanOrganisasiResource(true, 'List Data PeraturanOrganisasi', $peraturans);
     }

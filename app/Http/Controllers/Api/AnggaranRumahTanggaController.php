@@ -14,7 +14,7 @@ class AnggaranRumahTanggaController extends Controller
     {
         //get all posts
         // $anggaran_rumah_tangga = AnggaranRumahTangga::latest()->paginate(5);
-        $anggaran_rumah_tangga = AnggaranRumahTangga::with('creator')->latest()->paginate(5);
+        $anggaran_rumah_tangga = AnggaranRumahTangga::with('creator')->latest()->get();
         //return collection of posts as a resource
         return new AnggaranRumahTanggaResource(true, 'List Data Anggaran Dasar', $anggaran_rumah_tangga);
     }

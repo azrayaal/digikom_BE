@@ -13,7 +13,7 @@ class KegiatanController extends Controller
     public function index()
     {
         // $kegiatans = Kegiatan::latest()->paginate(5);
-        $kegiatans = Kegiatan::with('creator')->latest()->paginate(5);
+        $kegiatans = Kegiatan::with('creator')->latest()->get();
         //return collection of posts as a resource
         return new KegiatanResource(true, 'List Data Kegiatan', $kegiatans);
     }

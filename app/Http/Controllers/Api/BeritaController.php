@@ -14,7 +14,7 @@ class BeritaController extends Controller
     {
         //get all posts
         // $beritas = Berita::latest()->paginate(5);
-        $beritas = Berita::with('creator')->latest()->paginate(5);
+        $beritas = Berita::with('creator')->latest()->get();
         //return collection of posts as a resource
         return new BeritaResource(true, 'List Data Berita', $beritas);
     }

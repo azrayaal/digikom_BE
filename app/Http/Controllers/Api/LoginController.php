@@ -62,6 +62,7 @@ class LoginController extends Controller
         // Jika validasi gagal
         if ($validator->fails()) {
             return response()->json([
+                'success' => false,
                 'message' => 'Validasi gagal',
                 'errors'  => $validator->errors()
             ], 422);
@@ -73,6 +74,7 @@ class LoginController extends Controller
         // Jika autentikasi gagal
         if (!$token = JWTAuth::attempt($credentials)) {
             return response()->json([
+                'success' => false,
                 'message' => 'Email atau password salah'
             ], 401);
         }
@@ -93,6 +95,7 @@ class LoginController extends Controller
 
         // Jika autentikasi berhasil
         return response()->json([
+            'success'=> true,
             'message' => 'Login berhasil',
             'token'   => $token
         ], 200);
