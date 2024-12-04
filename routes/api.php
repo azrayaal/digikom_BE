@@ -7,9 +7,7 @@ Route::post('/logout', App\Http\Controllers\Api\LogoutController::class)->middle
 Route::post('/login', App\Http\Controllers\Api\LoginController::class)->name('login');
 
 Route::middleware(['jwt.auth'])->group(function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
+    Route::apiResource('/user', App\Http\Controllers\Api\UserController::class);
     Route::apiResource('/berita', App\Http\Controllers\Api\BeritaController::class);
     Route::apiResource('/kegiatan', App\Http\Controllers\Api\KegiatanController::class);
     Route::apiResource('/iuran', App\Http\Controllers\Api\IuranController::class);

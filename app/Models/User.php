@@ -25,6 +25,13 @@ class User extends Authenticatable implements JWTSubject
         'profile_picture',
         'phone_number',
         'jabatan_id',
+        'nomor_ktp',
+        'tanggal_lahir',
+        'tempat_lahir',
+        'alamat',
+        'pekerjaan_id',
+        'agama_id',
+        'pendidikan_id',
     ];
 
     /**
@@ -52,7 +59,22 @@ class User extends Authenticatable implements JWTSubject
     public function creator()
     {
         return $this->belongsTo(Jabatan::class, 'jabatan_id');
-        // return $this->belongsTo(Admin::class, 'created_by');
+    }
+    // public function usaha()
+    // {
+    //     return $this->belongsTo(Usaha::class, 'usaha_id');
+    // }
+    public function pendidikan()
+    {
+        return $this->belongsTo(Pendidikan::class, 'pendidikan_id');
+    }
+    public function agama()
+    {
+        return $this->belongsTo(Agama::class, 'agama_id');
+    }
+    public function pekerjaan()
+    {
+        return $this->belongsTo(Pekerjaan::class, 'pekerjaan_id');
     }
     /**
 * Get the identifier that will be stored in the subject claim of the JWT.
