@@ -16,6 +16,9 @@ Route::middleware(['jwt.auth'])->group(function () {
     Route::apiResource('/peraturan-organisasi', App\Http\Controllers\Api\PeraturanOrganisasiController::class);
     Route::apiResource('/pengurus', App\Http\Controllers\Api\PengurusController::class);
     Route::apiResource('/usaha-anggota', App\Http\Controllers\Api\UsahaAnggotaController::class);
+    Route::apiResource('/pendidikan', App\Http\Controllers\Api\PendidikanController::class);
+    Route::apiResource('/agama', App\Http\Controllers\Api\AgamaController::class);
+    Route::apiResource('/pekerjaan', App\Http\Controllers\Api\PekerjaanController::class);
 });
 
 
