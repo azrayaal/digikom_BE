@@ -39,25 +39,14 @@ public function __construct($status, $message, $resource)
                     'created_at' => $usaha->created_at,
                 ];
             }),
-            // 'pagination' => [
-            //     'current_page' => $this->resource->currentPage(),
-            //     'last_page' => $this->resource->lastPage(),
-            //     'per_page' => $this->resource->perPage(),
-            //     'total' => $this->resource->total(),
-            //     'links' => [
-            //         'first' => $this->resource->url(1),
-            //         'last' => $this->resource->url($this->resource->lastPage()),
-            //         'next' => $this->resource->nextPageUrl(),
-            //         'previous' => $this->resource->previousPageUrl(),
-            //     ],
-            // ],
+
         ];
     } else {
         return [
             'success' => $this->status,
             'message' => $this->message,
             'data' => [
-               'id' => $this->resource->id,
+                    'id' => $this->resource->id,
                     'nama_usaha' => $this->resource->nama_usaha,
                     'waktu_operational' => $this->resource->waktu_operational,
                     'lokasi_usaha' => $this->resource->lokasi_usaha,

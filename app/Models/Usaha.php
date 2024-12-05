@@ -14,7 +14,7 @@ class Usaha extends Model
      *
      * @var array
      */
-    protected $fillable = ['nama_usaha', 'waktu_operational', 'lokasi_usaha', 'nomor_usaha', 'deskripsi'];
+    protected $fillable = ['nama_usaha', 'waktu_operational', 'lokasi_usaha', 'nomor_usaha', 'deskripsi', 'user_id',];
     protected $casts = [
         'created_at' => 'datetime', // Pastikan tanggal dikonversi ke objek Carbon
     ];

@@ -12,17 +12,15 @@ class RegisterController extends Controller
 {
     public function register(Request $request)
     {
-        \Log::info('Register request received.', $request->all());
-    
         try {
             // Validasi input
             $request->validate([
                 'full_name' => 'required|string|max:255',
                 'email' => 'required|string|email|unique:users,email',
                 'password' => 'required|string|min:6',
-                'phone_number' => 'required|string|max:15',
-                'profile_picture' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                'nomor_ktp' => 'required|string|max:50',
+                'phone_number' => 'required|integer|max:15',
+                'profile_picture' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+                'nomor_ktp' => 'required|integer|max:50',
                 'tanggal_lahir' => 'required|date',
                 'tempat_lahir' => 'required|string|max:100',
                 'alamat' => 'required|string|max:255',
@@ -55,7 +53,6 @@ class RegisterController extends Controller
                 return new UserResource(true, 'User Registered Successfully', $user);
             
         } catch (\Exception $e) {
-            \Log::error('Error during registration: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to register user',
