@@ -6,49 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-// class LoginController extends Controller
-// {
-//     public function __invoke(Request $request)
-//     {
-//         // Validasi input
-//         $validator = Validator::make($request->all(), [
-//             'email'    => 'required|email',
-//             'password' => 'required'
-//         ]);
-
-//         // Jika validasi gagal
-//         if ($validator->fails()) {
-//             return response()->json([
-//                 'message' => 'Validasi gagal',
-//                 'errors'  => $validator->errors()
-//             ], 422);
-//         }
-
-//         // Kredensial login
-//         $credentials = $request->only('email', 'password');
-
-//         // Jika autentikasi gagal
-//         if (!$token = JWTAuth::attempt($credentials)) {
-//             return response()->json([
-//                 'message' => 'Email atau password salah'
-//             ], 401);
-//         }
-//         $user = auth()->user();
-//         // Jika autentikasi berhasil
-//         return response()->json([
-//             'message' => 'Login berhasil',
-//             'token'   => $token,
-//             'user'    => [
-//                 'email'           => $user->email,
-//                 'full_name'       => $user->full_name,
-//                 'profile_picture' => $user->profile_picture,
-//                 'phone_number'    => $user->phone_number,
-//                 'jabatan'         => $user->creator->nama_jabatan ?? null, // Pastikan relasi jabatan ada
-//             ]
-//         ], 200);
-//     }
-// }
-
 class LoginController extends Controller
 {
     public function __invoke(Request $request)

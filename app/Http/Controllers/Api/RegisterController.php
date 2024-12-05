@@ -64,4 +64,27 @@ class RegisterController extends Controller
         }
     }
     
+    public function destroy($id)
+    {
+        try {
+            // Cari user berdasarkan ID
+            $user = User::findOrFail($id);
+    
+            // Hapus user
+            $user->delete();
+    
+            // Berikan respon sukses
+            return response()->json([
+                'success' => true,
+                'message' => 'User Deleted Successfully',
+            ], 200);
+        } catch (\Exception $e) {
+            // Tangkap dan berikan respon error
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete user',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }

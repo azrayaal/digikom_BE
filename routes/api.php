@@ -4,9 +4,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\RegisterController;
 
-Route::post('/logout', App\Http\Controllers\Api\LogoutController::class)->middleware('jwt.auth')->name('logout');
-Route::post('/login', App\Http\Controllers\Api\LoginController::class)->name('login');
-Route::post('/register', [RegisterController::class, 'register']);
+Route::post('/auth/logout', App\Http\Controllers\Api\LogoutController::class)->middleware('jwt.auth')->name('logout');
+Route::post('/auth/login', App\Http\Controllers\Api\LoginController::class)->name('login');
+Route::post('/auth/register', [RegisterController::class, 'register']);
+Route::delete('/auth/user/{id}', [RegisterController::class, 'destroy']);
 
 Route::middleware(['jwt.auth'])->group(function () {
     Route::apiResource('/user', App\Http\Controllers\Api\UserController::class);
