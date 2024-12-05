@@ -51,7 +51,7 @@ class UserController extends Controller
         try {
             // Ambil pengguna yang terautentikasi dari token
             $user = JWTAuth::parseToken()->authenticate();
-    
+
             // Siapkan data untuk diupdate
             $data = [
                 'full_name' => $request->full_name ?? $user->full_name,
