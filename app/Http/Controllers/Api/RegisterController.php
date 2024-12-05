@@ -32,8 +32,6 @@ class RegisterController extends Controller
                 'pendidikan_id' => 'required|integer',
             ]);
     
-            \Log::info('Validation passed.');
-    
             // Proses penyimpanan file
             $profilePicturePath = $request->file('profile_picture')->store('profile_pictures', 'public');
     
@@ -54,13 +52,8 @@ class RegisterController extends Controller
                 'pendidikan_id' => $request->pendidikan_id,
             ]);
     
-            \Log::info('User created successfully.', ['user_id' => $user->id]);
-    
-            return response()->json([
-                'success' => true,
-                'message' => 'User Registered Successfully',
-                // 'data' => new UserResource($user),
-            ], 201);
+                return new UserResource(true, 'User Registered Successfully', $user);
+            
         } catch (\Exception $e) {
             \Log::error('Error during registration: ' . $e->getMessage());
             return response()->json([

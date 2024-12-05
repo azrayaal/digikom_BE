@@ -29,7 +29,9 @@ public function __construct($status, $message, $resource)
                     // 'nama_usaha' => $this->resource->nama_usaha ? $this->resource->nama_usaha : '-',
                     'full_name' => $this->resource->full_name,
                     'email' => $this->resource->email,
-                    'profile_picture' => $this->resource->profile_picture,
+                    'profile_picture' => $this->resource->profile_picture 
+                    ? url('storage/' . $this->resource->profile_picture) 
+                    : null,
                     'phone_number' => $this->resource->phone_number,
                     'nama_jabatan' => $this->resource->creator ? $this->resource->creator->nama_jabatan : 'Anggota',
                     'nomor_ktp' => $this->resource->nomor_ktp,
