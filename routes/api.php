@@ -2,9 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\RegisterController;
 
 Route::post('/logout', App\Http\Controllers\Api\LogoutController::class)->middleware('jwt.auth')->name('logout');
 Route::post('/login', App\Http\Controllers\Api\LoginController::class)->name('login');
+Route::post('/register', [RegisterController::class, 'register']);
 
 Route::middleware(['jwt.auth'])->group(function () {
     Route::apiResource('/user', App\Http\Controllers\Api\UserController::class);
@@ -20,5 +22,3 @@ Route::middleware(['jwt.auth'])->group(function () {
     Route::apiResource('/agama', App\Http\Controllers\Api\AgamaController::class);
     Route::apiResource('/pekerjaan', App\Http\Controllers\Api\PekerjaanController::class);
 });
-
-
