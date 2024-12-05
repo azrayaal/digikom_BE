@@ -28,7 +28,7 @@ class KegiatanController extends Controller
             })
             ->orderBy($sortBy, $order)
             ->paginate($perPage);
-    
+        
         return view('pages.kegiatan.index', compact('kegiatan', 'search', 'sortBy', 'order'));
     }
 

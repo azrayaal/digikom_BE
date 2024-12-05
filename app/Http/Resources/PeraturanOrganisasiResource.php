@@ -26,6 +26,7 @@ public function __construct($status, $message, $resource)
         return [
             'success'   => $this->status,
             'message'   => $this->message,
+            'Link'      => 'digikom.xyz/peraturanOrganisasi',
             // 'data'      => $this->resource
             'data' => $this->resource->map(function ($peraturan) {
                 return [

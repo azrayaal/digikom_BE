@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HtmlController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
@@ -19,6 +20,9 @@ Route::middleware(['auth:admin'])->group(function () {
 });
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::get('/peraturanOrganisasi', [HtmlController::class, 'indexPeraturanOrganisasi'])->name('peraturanOrganisasi');
+Route::get('/anggaranDasar', [HtmlController::class, 'indexAnggaranDasar'])->name('anggaranDasar');
+Route::get('/anggaranRumahTangga', [HtmlController::class, 'indexAnggaranRumahTangga'])->name('anggaranRumahTangga');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/test-log', function () {
