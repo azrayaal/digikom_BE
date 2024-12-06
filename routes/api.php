@@ -15,9 +15,12 @@ use App\Http\Controllers\Api\UsahaAnggotaController;
 use App\Http\Controllers\Api\PendidikanController;
 use App\Http\Controllers\Api\AgamaController;
 use App\Http\Controllers\Api\PekerjaanController;
+use App\Http\Controllers\Api\LogoutController;
+use App\Http\Controllers\Api\LoginController;
+use App\Http\Controllers\Api\TagihanController;
 
-Route::post('/auth/logout', App\Http\Controllers\Api\LogoutController::class)->middleware('jwt.auth')->name('logout');
-Route::post('/auth/login', App\Http\Controllers\Api\LoginController::class)->name('login');
+Route::post('/auth/logout', LogoutController::class)->middleware('jwt.auth')->name('logout');
+Route::post('/auth/login', LoginController::class)->name('login');
 Route::post('/auth/register', [RegisterController::class, 'register']);
 Route::delete('/auth/user/{id}', [RegisterController::class, 'destroy']);
 
@@ -37,4 +40,6 @@ Route::middleware(['jwt.auth'])->group(function () {
     Route::apiResource('/pendidikan', PendidikanController::class);
     Route::apiResource('/agama', AgamaController::class);
     Route::apiResource('/pekerjaan', PekerjaanController::class);
+    Route::apiResource('/tagihan', TagihanController::class);
+    Route::get('/my-usaha', [UsahaAnggotaController::class, 'myUsaha']);
 });

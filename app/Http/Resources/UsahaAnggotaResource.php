@@ -35,6 +35,9 @@ public function __construct($status, $message, $resource)
                     'lokasi_usaha' => $usaha->lokasi_usaha,
                     'nomor_usaha' => $usaha->nomor_usaha,
                     'deskripsi' => $usaha->deskripsi,
+                    'image_usaha' => $usaha->image_usaha 
+                    ? url('storage/' . $usaha->image_usaha) 
+                    : null,
                     'owner' => $usaha->creator ? $usaha->creator->full_name : null,
                     'created_at' => $usaha->created_at,
                 ];
@@ -52,6 +55,9 @@ public function __construct($status, $message, $resource)
                     'lokasi_usaha' => $this->resource->lokasi_usaha,
                     'nomor_usaha' => $this->resource->nomor_usaha,
                     'deskripsi' => $this->resource->deskripsi,
+                    'image_usaha' => $this->resource->image_usaha 
+                    ? url('storage/' . $this->resource->image_usaha) 
+                    : null,
                     'owner' => $this->resource->creator ? $this->resource->creator->full_name : null,
                     'created_at' => $this->resource->created_at,
             ],

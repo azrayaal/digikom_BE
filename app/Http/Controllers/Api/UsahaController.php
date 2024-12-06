@@ -47,8 +47,11 @@ class UsahaController extends Controller
                 'lokasi_usaha' => 'required|max:255',
                 'nomor_usaha' => 'nullable|integer',
                 'deskripsi' => 'required|string',
+                'image_usaha' => 'required|image|mimes:jpeg,png,jpg|max:2048'
             ]);
     
+            // Proses penyimpanan file
+                $image_usaha = $request->file('image_usaha')->store('image_usaha', 'public');
             // Siapkan data
             $data = $request->only([
                 'nama_usaha',
@@ -58,10 +61,11 @@ class UsahaController extends Controller
                 'deskripsi',
             ]);
             $data['user_id'] = $user->id;
+            $data['image_usaha'] = $image_usaha;
     
             // Buat usaha baru
             $usaha = Usaha::create($data);
-
+    
             return new UsahaAnggotaResource(true, 'Usaha created successfully', $usaha);
         } catch (\Exception $e) {
             return response()->json([
@@ -72,88 +76,91 @@ class UsahaController extends Controller
         }
     }
     
-
+    
     public function update(Request $request, $id)
-{
-    try {
-        // Ambil pengguna yang terautentikasi dari token
-        $user = JWTAuth::parseToken()->authenticate();
-
-        // Validasi input
-        $request->validate([
-            'nama_usaha' => 'nullable|string|max:255',
-            'waktu_operational' => 'nullable|max:255',
-            'lokasi_usaha' => 'nullable|max:255',
-            'nomor_usaha' => 'nullable|integer',
-            'deskripsi' => 'nullable|string',
-        ]);
-
-        // Cari data usaha berdasarkan ID dan pastikan usaha milik pengguna yang login
-        $usaha = Usaha::where('id', $id)->where('user_id', $user->id)->first();
-
-        if (!$usaha) {
+    {
+        try {
+            // Ambil pengguna yang terautentikasi dari token
+            $user = JWTAuth::parseToken()->authenticate();
+    
+            // Validasi input
+            $request->validate([
+                'nama_usaha' => 'nullable|string|max:255',
+                'waktu_operational' => 'nullable|max:255',
+                'lokasi_usaha' => 'nullable|max:255',
+                'nomor_usaha' => 'nullable|integer',
+                'deskripsi' => 'nullable|string',
+                'image_usaha' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+            ]);
+    
+            // Cari data usaha berdasarkan ID dan pastikan usaha milik pengguna yang login
+            $usaha = Usaha::where('id', $id)->where('user_id', $user->id)->first();
+    
+            if (!$usaha) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Usaha tidak ditemukan atau Anda tidak memiliki akses',
+                ], 404);
+            }
+    
+            // Proses penyimpanan file baru jika ada
+            if ($request->hasFile('image_usaha')) {
+                $image_usaha = $request->file('image_usaha')->store('image_usaha', 'public');
+                $usaha->image_usaha = $image_usaha; // Update image_usaha
+            }
+    
+            // Perbarui data usaha
+            $usaha->update($request->only([
+                'nama_usaha',
+                'waktu_operational',
+                'lokasi_usaha',
+                'nomor_usaha',
+                'deskripsi',
+            ]));
+    
+            // Return data usaha yang telah diperbarui
+            return new UsahaAnggotaResource(true, 'Usaha berhasil diperbarui', $usaha);
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Usaha tidak ditemukan atau Anda tidak memiliki akses',
-            ], 404);
+                'message' => 'Failed to update usaha',
+                'error' => $e->getMessage(),
+            ], 500);
         }
-
-        // Perbarui data usaha dengan data dari request
-        $data = $request->only([
-            'nama_usaha',
-            'waktu_operational',
-            'lokasi_usaha',
-            'nomor_usaha',
-            'deskripsi',
-        ]);
-        $data['user_id'] = $user->id;
-
-        $usaha->update($data);
-
-        // Return data usaha yang telah diperbarui
-        return new UsahaAnggotaResource(true, 'Usaha berhasil diperbarui', $usaha);
-    } catch (\Exception $e) {
-        // Tangkap dan kembalikan error
-        return response()->json([
-            'success' => false,
-            'message' => 'Failed to update usaha',
-            'error' => $e->getMessage(),
-        ], 500);
     }
-}
+    
 
-public function destroy($id)
-{
-    try {
-        // Ambil pengguna yang terautentikasi dari token
-        $user = JWTAuth::parseToken()->authenticate();
+    public function destroy($id)
+    {
+        try {
+            // Ambil pengguna yang terautentikasi dari token
+            $user = JWTAuth::parseToken()->authenticate();
 
-        // Cari data usaha berdasarkan ID dan pastikan usaha milik pengguna yang login
-        $usaha = Usaha::where('id', $id)->where('user_id', $user->id)->first();
+            // Cari data usaha berdasarkan ID dan pastikan usaha milik pengguna yang login
+            $usaha = Usaha::where('id', $id)->where('user_id', $user->id)->first();
 
-        if (!$usaha) {
+            if (!$usaha) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Usaha tidak ditemukan atau Anda tidak memiliki akses',
+                ], 404);
+            }
+
+            // Hapus data usaha
+            $usaha->delete();
+
+            // Return respon sukses
+            return response()->json([
+                'success' => true,
+                'message' => 'Usaha berhasil dihapus',
+            ], 200);
+        } catch (\Exception $e) {
+            // Tangkap dan kembalikan error
             return response()->json([
                 'success' => false,
-                'message' => 'Usaha tidak ditemukan atau Anda tidak memiliki akses',
-            ], 404);
+                'message' => 'Failed to delete usaha',
+                'error' => $e->getMessage(),
+            ], 500);
         }
-
-        // Hapus data usaha
-        $usaha->delete();
-
-        // Return respon sukses
-        return response()->json([
-            'success' => true,
-            'message' => 'Usaha berhasil dihapus',
-        ], 200);
-    } catch (\Exception $e) {
-        // Tangkap dan kembalikan error
-        return response()->json([
-            'success' => false,
-            'message' => 'Failed to delete usaha',
-            'error' => $e->getMessage(),
-        ], 500);
     }
-}
-
 }

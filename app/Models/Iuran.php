@@ -22,5 +22,13 @@ class Iuran extends Model
     {
         return $this->belongsTo(Admin::class, 'created_by');
     }
+    public function tagihans()
+    {
+        return $this->hasMany(Tagihan::class, 'iuran_id');
+    }
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 }
 
