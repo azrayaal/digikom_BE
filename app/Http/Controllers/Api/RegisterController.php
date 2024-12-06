@@ -18,9 +18,9 @@ class RegisterController extends Controller
                 'full_name' => 'required|string|max:255',
                 'email' => 'required|string|email|unique:users,email',
                 'password' => 'required|string|min:6',
-                'phone_number' => 'required|string|regex:/^[0-9]{10,15}$/',
+                'phone_number' => 'required|string|regex:/^[0-9]{10,15}$/|unique:users,phone_number', // Hapus 'phone_number' sebagai aturan tambahan
                 'profile_picture' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-                'nomor_ktp' => 'nullable|integer|max:50',
+                'nomor_ktp' => 'nullable|integer|nomor_ktp|unique:users,nomor_ktp',
                 'tanggal_lahir' => 'nullable|date',
                 'tempat_lahir' => 'nullable|string|max:100',
                 'alamat' => 'nullable|string|max:255',
@@ -45,7 +45,6 @@ class RegisterController extends Controller
                 'tempat_lahir' => $request->tempat_lahir,
                 'alamat' => $request->alamat,
                 'pekerjaan_id' => $request->pekerjaan_id,
-                'jabatan_id' => $request->jabatan_id,
                 'agama_id' => $request->agama_id,
                 'pendidikan_id' => $request->pendidikan_id,
             ]);

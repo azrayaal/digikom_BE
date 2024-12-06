@@ -26,6 +26,7 @@ Route::delete('/auth/user/{id}', [RegisterController::class, 'destroy']);
 
 Route::middleware(['jwt.auth'])->group(function () {
     Route::apiResource('/user', UserController::class);
+    Route::get('/smart-card', [UserController::class, 'smartCard']);
     Route::post('/user/edit-profile', [UserController::class, 'update']);
     // ubah agar tidak menggunakan route post
     Route::apiResource('/usaha', UsahaController::class);

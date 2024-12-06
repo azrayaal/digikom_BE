@@ -29,6 +29,23 @@ class UserController extends Controller
             ], 500);
         }
     }
+    public function smartCard()
+    {
+        try {
+            // Ambil data user yang sedang login
+            $user = JWTAuth::parseToken()->authenticate();
+
+            // Return data user sebagai resource
+            return new UserResource(true, 'Data Smart Card', $user);
+        } catch (\Exception $e) {
+            // Jika terjadi error (contohnya token invalid atau expired)
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve user data',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
     public function update(Request $request)
     {
         // Validasi input
@@ -38,7 +55,7 @@ class UserController extends Controller
             'password' => 'nullable|string|min:6',
             'phone_number' => 'nullable|string|max:15',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'nomor_ktp' => 'nullable|string|max:50',
+            'nomor_ktp' => 'nullable|string|max:50|unique:users,nomor_ktp,' . auth()->id(),
             'tanggal_lahir' => 'nullable|date',
             'tempat_lahir' => 'nullable|string|max:100',
             'alamat' => 'nullable|string|max:255',

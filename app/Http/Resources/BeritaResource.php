@@ -31,24 +31,14 @@ public function __construct($status, $message, $resource)
                 return [
                     'id' => $berita->id,
                     'tittle' => $berita->tittle,
-                    'banner' => $berita->banner,
+                    'banner' => $berita->banner 
+                    ? url('storage/' . $berita->banner) 
+                    : null,
                     'content' => $berita->content,
                     'created_by' => $berita->creator ? $berita->creator->full_name : null,
                     'created_at' => $berita->created_at,
                 ];
             }),
-            // 'pagination' => [
-            //     'current_page' => $this->resource->currentPage(),
-            //     'last_page' => $this->resource->lastPage(),
-            //     'per_page' => $this->resource->perPage(),
-            //     'total' => $this->resource->total(),
-            //     'links' => [
-            //         'first' => $this->resource->url(1),
-            //         'last' => $this->resource->url($this->resource->lastPage()),
-            //         'next' => $this->resource->nextPageUrl(),
-            //         'previous' => $this->resource->previousPageUrl(),
-            //     ],
-            // ],
         ];
     } else {
         return [
@@ -57,7 +47,9 @@ public function __construct($status, $message, $resource)
             'data' => [
                 'id' => $this->resource->id,
                 'tittle' => $this->resource->tittle,
-                'banner' => $this->resource->banner,
+                'banner' => $this->resource->banner 
+                ? url('storage/' . $this->resource->banner) 
+                : null,
                 'content' => $this->resource->content,
                 'created_by' => $this->resource->creator ? $this->resource->creator->full_name : null,
                 'created_at' => $this->resource->created_at,
