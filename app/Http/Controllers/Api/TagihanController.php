@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Pembayaran;
 use App\Models\Tagihan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -15,30 +16,36 @@ class TagihanController extends Controller
     public function index()
     {
         try {
+            // Authenticate the user and get their information
             $user = JWTAuth::parseToken()->authenticate();
     
-            $iurans = Iuran::with(['tagihans' => function ($query) use ($user) {
-                $query->where('user_id', $user->id);
-            }])->get();
+            // Retrieve tagihans for the authenticated user
+            $tagihans = Tagihan::where('user_id', $user->id)->get();
     
-            $result = $iurans->map(function ($iuran) use ($user) {
-                $tagihan = $iuran->tagihans->first();
+            // Format the result
+            $result = $tagihans->map(function ($tagihan) {
+                // Access related iuran data through the relationship
+                $iuran = $tagihan->iuran;  // This will fetch the related iuran record
+    
                 return [
-                    'iuran_id' => $iuran->id,
-                    'bulan' => $iuran->bulan,
-                    'jumlah' => $iuran->jumlah,
-                    'status' => $tagihan ? $tagihan->status : 'Belum Lunas',
-                    'tanggal_bayar' => $tagihan ? $tagihan->tanggal_bayar : 'Belum Dibayar',
-                    'nominal' => $tagihan ? $tagihan->nominal : 0,
+                    'id' => $tagihan->id,
+                    'iuran_id' => $tagihan->iuran_id,
+                    'bulan' => $iuran ? $iuran->bulan : 'N/A', // Check if iuran exists
+                    'jumlah' => $iuran ? $iuran->jumlah : 0,   // Check if iuran exists
+                    'status' => $tagihan->status,
+                    'tanggal_bayar' => $tagihan->tanggal_bayar ?? 'Belum Dibayar',  // If no tanggal_bayar, show 'Belum Dibayar'
+                    'nominal' => $tagihan->nominal ?? 0, // If no nominal, default to 0
                 ];
             });
     
+            // Return the response with the data
             return response()->json([
                 'success' => true,
-                'message' => 'List Data Iuran',
+                'message' => 'List Data Tagihan',
                 'data' => $result,
             ]);
         } catch (\Exception $e) {
+            // Handle any errors
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to fetch data',
@@ -46,38 +53,25 @@ class TagihanController extends Controller
             ], 500);
         }
     }
-    
 
     public function show($id)
     {
         try {
-            // Ambil user yang sedang login
-            $user = JWTAuth::parseToken()->authenticate();
+            // Fetch the Tagihan by id
+            $tagihan = Tagihan::findOrFail($id);
     
-            // Cari iuran berdasarkan ID dan sertakan informasi tagihan user terkait
-            $iuran = Iuran::with(['tagihans' => function ($query) use ($user) {
-                $query->where('user_id', $user->id);
-            }])->find($id);
+            // Access related iuran data through the relationship
+            $iuran = $tagihan->iuran;  // This will fetch the related iuran record
     
-            // Jika iuran tidak ditemukan
-            if (!$iuran) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Iuran tidak ditemukan',
-                ], 404);
-            }
-    
-            // Ambil tagihan terkait user yang sedang login
-            $tagihan = $iuran->tagihans->first();
-    
-            // Format data iuran beserta status pembayaran
+            // Format the result
             $result = [
-                'iuran_id' => $iuran->id,
-                'bulan' => $iuran->bulan,
-                'jumlah' => $iuran->jumlah,
-                'status' => $tagihan ? $tagihan->status : 'Belum Lunas',
-                'tanggal_bayar' => $tagihan ? $tagihan->tanggal_bayar : 'Belum Dibayar',
-                'nominal' => $tagihan ? $tagihan->nominal : 0,
+                'id' => $tagihan->id,
+                'iuran_id' => $tagihan->iuran_id,
+                'bulan' => $iuran ? $iuran->bulan : 'N/A', // Check if iuran exists
+                'jumlah' => $iuran ? $iuran->jumlah : 0,   // Check if iuran exists
+                'status' => $tagihan->status,
+                'tanggal_bayar' => $tagihan->tanggal_bayar ?? 'Belum Dibayar',  // If no tanggal_bayar, show 'Belum Dibayar'
+                'nominal' => $tagihan->nominal ?? 0, // If no nominal, default to 0
             ];
     
             // Return response
@@ -87,7 +81,7 @@ class TagihanController extends Controller
                 'data' => $result,
             ], 200);
         } catch (\Exception $e) {
-            // Tangkap error jika ada
+            // Handle any errors
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to fetch data',
@@ -96,56 +90,69 @@ class TagihanController extends Controller
         }
     }
     
+    
     public function store(Request $request)
-{
-    try {
-        // Ambil user yang sedang login
-        $user = JWTAuth::parseToken()->authenticate();
-
-        // Validasi input
-        $request->validate([
-            'iuran_id' => 'required|exists:iurans,id', // Pastikan iuran_id ada di tabel iurans
-            'nominal' => 'required|integer|min:0',
-            'metode_pembayaran' => 'nullable|string|max:255',
-        ]);
-
-        // Cek apakah user sudah membayar iuran ini
-        $existingTagihan = Tagihan::where('user_id', $user->id)
-            ->where('iuran_id', $request->iuran_id)
-            ->first();
-
-        if ($existingTagihan) {
+    {
+        try {
+            // Ambil user yang sedang login
+            $user = JWTAuth::parseToken()->authenticate();
+    
+            // Validasi input
+            $request->validate([
+                'tagihan_id' => 'required|exists:tagihans,id', // Pastikan tagihan_id ada di tabel tagihans
+                'opsi_id' => 'required|exists:opsi_bayars,id', // Pastikan opsi_id ada di tabel opsi_bayars
+                'jumlah' => 'required|numeric|min:0', // Pastikan jumlah valid
+                'tanggal_pembayaran' => 'required|date', // Pastikan tanggal_pembayaran valid
+                'status_pembayaran' => 'required|string|in:pending,paid,canceled', // Pastikan status_pembayaran valid
+            ]);
+    
+            // Cek apakah tagihan ini sudah dibayar sebelumnya
+            $existingPayment = Pembayaran::where('user_id', $user->id)
+                ->where('tagihan_id', $request->tagihan_id)
+                ->first();
+    
+            if ($existingPayment) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Pembayaran untuk tagihan ini sudah dilakukan.',
+                ], 400);
+            }
+    
+            // Buat pembayaran baru
+            $payment = Pembayaran::create([
+                'user_id' => $user->id,
+                'tagihan_id' => $request->tagihan_id,
+                'opsi_id' => $request->opsi_id,
+                'jumlah' => $request->jumlah,   
+                'tanggal_pembayaran' => $request->tanggal_pembayaran,
+                'status_pembayaran' => $request->status_pembayaran, // Misalnya 'paid'
+                'created_at' => now(),
+            ]);
+    
+            // Update status tagihan menjadi 'Lunas' jika sudah dibayar
+            $tagihan = Tagihan::find($request->tagihan_id);
+            if ($payment->status_pembayaran === 'Belum Lunas') {
+                $tagihan->status = 'Lunas';
+                $tagihan->tanggal_bayar = $request->tanggal_pembayaran;
+                $tagihan->save();
+            }
+    
+            // Return response sukses
+            return response()->json([
+                'success' => true,
+                'message' => 'Pembayaran berhasil diproses',
+                'data' => $payment,
+            ], 201);
+    
+        } catch (\Exception $e) {
+            // Tangkap dan return error
             return response()->json([
                 'success' => false,
-                'message' => 'Tagihan sudah berhasil dibayarkan',
-            ], 400);
+                'message' => 'Transaksi gagal',
+                'error' => $e->getMessage(),
+            ], 500);
         }
-
-        // Buat tagihan baru
-        $tagihan = Tagihan::create([
-            'user_id' => $user->id,
-            'iuran_id' => $request->iuran_id,
-            'status' => 'Lunas', // Status awal
-            'nominal' => $request->nominal,
-            'metode_pembayaran' => $request->metode_pembayaran,
-            'tanggal_bayar' => now(), // Belum dibayar
-            'created_at' => now(),
-        ]);
-
-        // Return response sukses
-        return response()->json([
-            'success' => true,
-            'message' => 'Transaksi berhasil',
-            'data' => $tagihan,
-        ], 201);
-    } catch (\Exception $e) {
-        // Tangkap dan return error
-        return response()->json([
-            'success' => false,
-            'message' => 'Transaksi gagal',
-            'error' => $e->getMessage(),
-        ], 500);
     }
-}
+    
 
 }
