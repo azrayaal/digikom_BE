@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Middleware;
 
 use Closure;
@@ -62,7 +61,6 @@ class JwtMiddleware
                 'status' => 500,
             ], 500);
         }
-
         // Jika token valid, lanjutkan ke request berikutnya
         return $next($request);
     }

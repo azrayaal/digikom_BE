@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Exceptions\Renderer\Exception;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use Log;
@@ -21,12 +22,15 @@ class UserController extends Controller
             // Return data user sebagai resource
             return new UserResource(true, 'Data Profile', $user);
         } catch (\Exception $e) {
-            // Jika terjadi error (contohnya token invalid atau expired)
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to retrieve user data',
-                'error' => $e->getMessage(),
-            ], 500);
+            if ($e instanceof \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException) {
+                return new UserResource(false, 'Unauthorized', $e->getMessage());
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to retrieve user data',
+                    'error' => $e->getMessage(),
+                ], 500);
+            }
         }
     }
     public function smartCard()

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\OpsiBayarController;
+use App\Http\Controllers\Api\KategoriPembayaranController;
 use App\Http\Controllers\Api\UsahaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\RegisterController;
@@ -43,4 +45,6 @@ Route::middleware(['jwt.auth'])->group(function () {
     Route::apiResource('/pekerjaan', PekerjaanController::class);
     Route::apiResource('/tagihan', TagihanController::class);
     Route::get('/my-usaha', [UsahaAnggotaController::class, 'myUsaha']);
+    Route::apiResource('/opsi-bayar', OpsiBayarController::class);
+    Route::apiResource('/kategori-bayar', KategoriPembayaranController::class);
 });
