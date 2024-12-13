@@ -30,8 +30,9 @@ class TagihanController extends Controller
                 return [
                     'id' => $tagihan->id,
                     'iuran_id' => $tagihan->iuran_id,
-                    'bulan' => $iuran ? $iuran->bulan : 'N/A', // Check if iuran exists
-                    'jumlah' => $iuran ? $iuran->jumlah : 0,   // Check if iuran exists
+                    'bulan' => $tagihan->keterangan, 
+                    'tahun' => $iuran ? $iuran->tahun : 'N/A', 
+                    'jumlah' => $tagihan->nominal,   
                     'status' => $tagihan->status,
                     'tanggal_bayar' => $tagihan->tanggal_bayar ?? 'Belum Dibayar',  // If no tanggal_bayar, show 'Belum Dibayar'
                     'nominal' => $tagihan->nominal ?? 0, // If no nominal, default to 0

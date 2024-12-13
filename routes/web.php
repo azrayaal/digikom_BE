@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\HtmlController;
+use App\Http\Controllers\IuranController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
 Route::middleware(['auth:admin'])->group(function () {
     Route::resource('/', \App\Http\Controllers\IndexController::class);
     Route::resource('/iuran', \App\Http\Controllers\IuranController::class);
+    Route::get('/laporan-iuran', [IuranController::class, 'laporanIuran'])->name('iuran.tagihan');
     Route::resource('/berita', \App\Http\Controllers\BeritaController::class);
     Route::resource('/kegiatan', \App\Http\Controllers\KegiatanController::class);
     Route::resource('/anggaran-dasar', \App\Http\Controllers\AnggaranDasarController::class);
@@ -17,6 +19,7 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::resource('/anggota', \App\Http\Controllers\UserController::class);
     Route::resource('/pengurus', \App\Http\Controllers\PengurusController::class);
     Route::resource('/usaha', \App\Http\Controllers\UsahaController::class);
+    Route::get('/iuran/{id}/enroll', [IuranController::class, 'enrollTagihan'])->name('iuran.enroll');
 });
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');

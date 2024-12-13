@@ -68,12 +68,21 @@
 
         <!-- Iuran -->
         <li class="nav-item menu-items">
-            <a class="nav-link <?php echo e(request()->is('iuran*') ? 'active' : ''); ?>" href="<?php echo e(route('iuran.index')); ?>">
+            <a class="nav-link <?php echo e(request()->is('iuran*') || request()->is('tagihan*') || request()->is('laporan-iuran*') ? 'active' : ''); ?>" data-toggle="collapse" href="#iuran" aria-expanded="false" aria-controls="iuran">
                 <span class="menu-icon">
                     <i class="mdi mdi-cash-multiple"></i>
                 </span>
                 <span class="menu-title">Iuran</span>
+                <i class="menu-arrow"></i>
             </a>
+            <div class="collapse <?php echo e(request()->is('iuran*') || request()->is('tagihan*') || request()->is('laporan-iuran*') ? 'show' : ''); ?>" id="iuran">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"><a class="nav-link" href="<?php echo e(route('iuran.index')); ?>">Tagihan</a></li>
+                </ul>
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"><a class="nav-link" href="<?php echo e(route('iuran.tagihan')); ?>">Laporan Iuran</a></li>
+                </ul>
+            </div>
         </li>
 
         <!-- Kegiatan -->

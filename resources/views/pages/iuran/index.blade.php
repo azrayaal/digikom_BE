@@ -7,8 +7,8 @@
 <div class="main-panel">
     <div class="content-wrapper" style="background-color: #D1D1D1;">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="card-title text-black">Iuran:</h3>
-            <a href="{{ route('iuran.create') }}" class="btn btn-primary">Create New iuran</a>
+            <h3 class="card-title text-black">Tagihan:</h3>
+            <a href="{{ route('iuran.create') }}" class="btn btn-primary">Create New Tagihan</a>
         </div>
         <div class="col grid-margin stretch-card">
             <div class="card" style="background-color: #2A2A2A;">
@@ -35,8 +35,8 @@
                         <tr style="background-color: #D1D1D1;">
                             <th style="color: black;">No</th>
                             <th style="color: black;">
-                                <a href="{{ route('iuran.index', array_merge(request()->all(), ['sort_by' => 'bulan', 'order' => request('order') === 'asc' ? 'desc' : 'asc'])) }}" style="color: black;   text-decoration: none!important;">
-                                    Bulan <span class="mdi mdi-arrow-expand
+                                <a href="{{ route('iuran.index', array_merge(request()->all(), ['sort_by' => 'tahun', 'order' => request('order') === 'asc' ? 'desc' : 'asc'])) }}" style="color: black;   text-decoration: none!important;">
+                                    Tahun <span class="mdi mdi-arrow-expand
                                 {{ request('order') === 'asc' ? 'asc' : 'desc' }}"></span>
                                 </a>
                             </th>
@@ -54,8 +54,8 @@
                         @foreach ($iuran as $item)
                         <tr onclick="location.href='{{ route('iuran.show', $item->id) }}'" style="cursor: pointer;">
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->bulan }}</td>
-                            <td>{{ $item->jumlah }}</td>
+                            <td>{{ $item->tahun }}</td>
+                            <td>{{ 'Rp ' . number_format($item->jumlah, 0, ',', '.') }}</td>
                             <td>{{ $item->keterangan }}</td>
                             <td>
                                 <a href="{{ route('iuran.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
@@ -64,6 +64,7 @@
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus iuran ini?')">Delete</button>
                                 </form>
+                                <a href="{{ route('iuran.enroll', $item->id) }}" class="btn btn-sm btn-primary">Enroll</a>
                             </td>
                         </tr>
                         @endforeach

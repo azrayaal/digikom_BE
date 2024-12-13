@@ -32,6 +32,7 @@ class User extends Authenticatable implements JWTSubject
         'pekerjaan_id',
         'agama_id',
         'pendidikan_id',
+        'status'
     ];
 
     /**
