@@ -48,48 +48,55 @@
                         </form>
                     </div>
 
-                    @if ($iuran->count())
-                        <table class="table table-hover text-white">
-                            <thead>
-                                <tr style="background-color: #D1D1D1;">
-                                    <th style="color: black;">No</th>
-                                    <th style="color: black;">No Anggota</th>
-                                    <th style="color: black;">Nama Anggota</th>
-                                    <th style="color: black;">Jumlah</th>
-                                    <th style="color: black;">Keterangan</th>
-                                    <th style="color: black;">tahun</th>
-                                    <th style="color: black;">status</th>
-                                    <th style="color: black;">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($iuran as $item)
-                                    <tr onclick="location.href='{{ route('iuran.show', $item->id) }}'" style="cursor: pointer;">
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->users->phone_number }}</td>
-                                        <td>{{ $item->users->full_name }}</td>
-                                        <td>Rp. {{ number_format($item->nominal, 0, ',', '.') }}</td>
-                                        <td>{{ $item->keterangan }}</td>
-                                        <td>{{ $item->iuran->tahun }}</td> <!-- Akses tahun dari relasi iuran -->
-                                        <td>{{ $item->status }}</td>
-                                        <td>
-                                            <a href="{{ route('iuran.edit', $item->id) }}" class="btn btn-sm btn-warning">Detail</a>
-                                        </td>
+                    <!-- Hanya tampilkan tabel jika ada pencarian -->
+                    @if(request()->has('year') || request()->has('month') || request()->has('user_id'))
+                        @if ($iuran->count())
+                            <table class="table table-hover text-white">
+                                <thead>
+                                    <tr style="background-color: #D1D1D1;">
+                                        <th style="color: black;">No</th>
+                                        <th style="color: black;">No Anggota</th>
+                                        <th style="color: black;">Nama Anggota</th>
+                                        <th style="color: black;">Jumlah</th>
+                                        <th style="color: black;">Keterangan</th>
+                                        <th style="color: black;">Tahun</th>
+                                        <th style="color: black;">Status</th>
+                                        <th style="color: black;">Action</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach ($iuran as $item)
+                                        <tr onclick="location.href='{{ route('tagihan.show', $item->id) }}'" style="cursor: pointer;">
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $item->users->phone_number }}</td>
+                                            <td>{{ $item->users->full_name }}</td>
+                                            <td>Rp. {{ number_format($item->nominal, 0, ',', '.') }}</td>
+                                            <td>{{ $item->keterangan }}</td>
+                                            <td>{{ $item->iuran->tahun }}</td>
+                                            <td>{{ $item->status }}</td>
+                                            <td>
+                                                <a href="{{ route('iuran.show', $item->id) }}" class="btn btn-sm btn-warning">Detail</a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        @else
+                            <p class="text-center text-muted mt-3">Tidak ada iuran yang sesuai dengan pencarian.</p>
+                        @endif
                     @else
-                        <p class="text-center text-muted mt-3">Tidak ada iuran yang sesuai dengan pencarian.</p>
+                        <p class="text-center text-muted mt-3">Silakan pilih filter untuk menampilkan data.</p>
                     @endif
                 </div>
             </div>
         </div>
 
         <!-- Pagination -->
-        <div class="d-flex justify-content-center mt-4">
-            {{ $iuran->links('pagination::bootstrap-4') }}
-        </div>
+        @if(request()->has('year') || request()->has('month') || request()->has('user_id'))
+            <div class="d-flex justify-content-center mt-4">
+                {{ $iuran->links('pagination::bootstrap-4') }}
+            </div>
+        @endif
     </div>
 
     <!-- Footer -->
@@ -100,3 +107,5 @@
         </div>
     </footer>
 </div>
+
+@include('components.footer')

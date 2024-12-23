@@ -36,4 +36,36 @@ class BeritaController extends Controller
         return new BeritaResource(true, 'Detail Data Berita', $berita);
     }
 
+    public function search(Request $request)
+{
+    $request->validate([
+        'query' => 'required|string',
+    ]);
+
+    $query = $request->input('query');
+    \Log::info('Pencarian query: ' . $query);
+
+    $beritas = Berita::
+        whereRaw('LOWER(tittle) LIKE ?', ['%' . strtolower($query) . '%'])
+        ->orWhereRaw('LOWER(content) LIKE ?', ['%' . strtolower($query) . '%'])
+        ->latest()
+        ->get();
+
+    // Debugging hasil query
+    \Log::info('Beritas:', $beritas->toArray());
+
+    if ($beritas->isEmpty()) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Berita tidak ditemukan',
+        ], 404);
+    }
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Hasil Pencarian Berita',
+        'data' => $beritas,
+    ]);
+}
+
 }

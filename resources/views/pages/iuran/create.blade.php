@@ -26,8 +26,8 @@
                 <form action="{{ route('iuran.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
-                        <label for="bulan" class="text-white" style="font-weight: bold;">Bulan</label>
-                        <input type="text" class="form-control text-white" name="bulan" id="bulan" required>
+                        <label for="tahun" class="text-white" style="font-weight: bold;">Tahun</label>
+                        <input type="number" class="form-control text-white" name="tahun" id="tahun" required>
                     </div>
 
                     <div class="form-group">

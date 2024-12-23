@@ -140,4 +140,18 @@ class UserController extends Controller
 
         return redirect()->route('anggota.index')->with('success', 'user berhasil dihapus!');
     }
+
+    public function toggleSuspend($id)
+    {
+        $user = User::findOrFail($id);
+    
+        // Toggle status: Jika 0 jadi 1, jika 1 jadi 0
+        $user->status = $user->status == 0 ? 1 : 0;
+        $user->save();
+    
+        $message = $user->status == 1 ? 'User berhasil diaktifkan kembali (unsuspend)!' : 'User berhasil disuspend!';
+        return redirect()->route('anggota.index')->with('success', $message);
+    }
+    
+
 }

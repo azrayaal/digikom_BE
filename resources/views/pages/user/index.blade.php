@@ -31,40 +31,65 @@
                 </div>
 
                 <table class="table table-hover text-white">
-                    <thead>
-                        <tr style="background-color: #D1D1D1;">
-                            <th style="color: black;">No</th>
-                            <th style="color: black;">Profile</th>
-                            <th style="color: black;">Nama Lengkap</th>
-                            <th style="color: black;">Email</th>
-                            <th style="color: black;">Nomor Telpon</th>
-                            <th style="color: black;">Jabatan</th>
-                            <th style="color: black;">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($user as $item)
-                        <tr onclick="location.href='{{ route('anggota.show', $item->id) }}'" style="cursor: pointer;">
-                            <td>{{ $loop->iteration }}</td>
-                            <td>
-                                <img src="{{ asset('storage/' . $item->profile_picture) }}" alt="">
-                            </td>
-                            <td>{{ $item->full_name }}</td>
-                            <td>{{ $item->email }}</td>
-                            <td>{{ $item->phone_number }}</td>
-                            <td>{{ $item->creator->nama_jabatan ?? 'Tidak Ada Jabatan' }}</td>
-                            <td>
-                                <a href="{{ route('anggota.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                <form action="{{ route('anggota.destroy', $item->id) }}" method="POST" style="display: inline-block;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus user ini?')">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                <thead>
+                    <tr style="background-color: #D1D1D1;">
+                        <th style="color: black;">No</th>
+                        <th style="color: black;">Profile</th>
+                        <th style="color: black;">Nama Lengkap</th>
+                        <th style="color: black;">Email</th>
+                        <th style="color: black;">Nomor Telpon</th>
+                        <th style="color: black;">Jabatan</th>
+                        <th style="color: black;">Status</th> <!-- Tambahkan kolom status -->
+                        <th style="color: black;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($user as $item)
+                    <tr onclick="location.href='{{ route('anggota.show', $item->id) }}'" style="cursor: pointer;">
+                        <td>{{ $loop->iteration }}</td>
+                        <td>
+                            <img src="{{ asset('storage/' . $item->profile_picture) }}" alt="" style="width: 50px; height: 50px;">
+                        </td>
+                        <td>{{ $item->full_name }}</td>
+                        <td>{{ $item->email }}</td>
+                        <td>{{ $item->phone_number }}</td>
+                        <td>{{ $item->creator->nama_jabatan ?? 'Tidak Ada Jabatan' }}</td>
+                        <td>
+                            <!-- Tampilkan status -->
+                            @if ($item->status == 1)
+                                <span class="badge bg-success">Active</span>
+                            @else
+                                <span class="badge bg-danger">Suspend</span>
+                            @endif
+                        </td>
+                        <td>
+                            <!-- Tombol edit -->
+                            <a href="{{ route('anggota.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
+
+                            <!-- Tombol suspend/unsuspend -->
+                            <form action="{{ route('anggota.toggleSuspend', $item->id) }}" method="POST" style="display: inline-block;">
+                                @csrf
+                                <button type="submit" class="btn btn-sm {{ $item->status == 1 ? 'btn-secondary' : 'btn-success' }}" 
+                                        onclick="return confirm('Apakah Anda yakin ingin {{ $item->status == 1 ? 'mensuspend' : 'mengaktifkan' }} user ini?')">
+                                    {{ $item->status == 1 ? 'Suspend' : 'Unsuspend' }}
+                                </button>
+                            </form>
+
+                            <!-- Tombol delete -->
+                            <form action="{{ route('anggota.destroy', $item->id) }}" method="POST" style="display: inline-block;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus user ini?')">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
                 @if($user->isEmpty())
                 <p class="text-center text-muted mt-3">Tidak ada user yang tersedia.</p>
                 @endif

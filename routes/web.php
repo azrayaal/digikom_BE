@@ -4,10 +4,13 @@ use App\Http\Controllers\HtmlController;
 use App\Http\Controllers\IuranController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 
 Route::middleware(['auth:admin'])->group(function () {
     Route::resource('/', \App\Http\Controllers\IndexController::class);
     Route::resource('/iuran', \App\Http\Controllers\IuranController::class);
+    Route::get('/tagihan/{id}', [IuranController::class, 'showTagihan'])->name('tagihan.show');
+
     Route::get('/laporan-iuran', [IuranController::class, 'laporanIuran'])->name('iuran.tagihan');
     Route::resource('/berita', \App\Http\Controllers\BeritaController::class);
     Route::resource('/kegiatan', \App\Http\Controllers\KegiatanController::class);
@@ -15,6 +18,7 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::resource('/anggaran-rumah-tangga', \App\Http\Controllers\AnggaranRumahTanggaController::class);
     Route::resource('/peraturan-organisasi', \App\Http\Controllers\PeraturanOrganisasiController::class);
     Route::resource('/jabatan', \App\Http\Controllers\JabatanController::class);
+    Route::post('/anggota/toggle-suspend/{id}', [UserController::class, 'toggleSuspend'])->name('anggota.toggleSuspend');
 
     Route::resource('/anggota', \App\Http\Controllers\UserController::class);
     Route::resource('/pengurus', \App\Http\Controllers\PengurusController::class);

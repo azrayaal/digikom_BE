@@ -77,7 +77,7 @@
             </a>
             <div class="collapse {{ request()->is('iuran*') || request()->is('tagihan*') || request()->is('laporan-iuran*') ? 'show' : '' }}" id="iuran">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"><a class="nav-link" href="{{ route('iuran.index') }}">Tagihan</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('iuran.index') }}">Setup Iuran</a></li>
                 </ul>
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"><a class="nav-link" href="{{ route('iuran.tagihan') }}">Laporan Iuran</a></li>

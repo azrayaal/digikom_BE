@@ -197,4 +197,14 @@ class IuranController extends Controller
         
             return view('pages.iuran.laporan', compact('iuran', 'users', 'search', 'year', 'month', 'userId'));
         }
+
+        public function showTagihan($id)
+{
+    // Cari tagihan berdasarkan ID, bersama dengan relasi 'iuran' dan 'users'
+    $tagihan = Tagihan::with(['iuran', 'users'])->findOrFail($id);
+
+    // Tampilkan halaman show dengan data tagihan yang ditemukan
+    return view('pages.iuran.laporanDetail', compact('tagihan'));
+}
+
 }
