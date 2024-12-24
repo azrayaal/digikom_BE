@@ -22,15 +22,22 @@ class TransactionController extends Controller
         ->where('user_id', $user->id)
         ->get();
 
+
+
     // Format data untuk setiap transaksi
     $data = $transactions->map(function ($transaction) {
         $tagihan = $transaction->tagihan;
         $metode_pembayaran = $tagihan->metode_pembayaran;
     
-        // Query the opsi_bayar table and set a default if not found
+        // Query the opsi_bayar table to get the payment method and set a default if not found
         $opsi_bayar = \DB::table('opsi_bayars')
             ->where('kode', $metode_pembayaran)
             ->value('opsi_bayar') ?? 'Unknown';
+    
+        // Query the opsi_bayar table again to get the admin fee (biaya_tetap)
+        $adminFee = \DB::table('opsi_bayars')
+            ->where('kode', $metode_pembayaran)  // Use metode_pembayaran to fetch the admin fee
+            ->value('biaya_tetap') ?? 0;  // Default to 0 if no admin fee is found
     
         return [
             'id' => $transaction->id,
@@ -42,11 +49,13 @@ class TransactionController extends Controller
                 'tahun' => $tagihan->iuran->tahun,
                 'status' => $tagihan->status,
                 'metode_pembayaran' => $opsi_bayar,
-                // 'tanggal_bayar' => $tagihan->tanggal_bayar,
-                'nominal' => $tagihan->nominal,
-            ],
+                'nominal' => $tagihan->iuran->jumlah,
+                'admin' => $adminFee,
+                'total' => $tagihan->iuran->jumlah + $adminFee,
+                ],
         ];
     });
+    
     
     
 
@@ -84,7 +93,10 @@ class TransactionController extends Controller
         $opsi_bayar = \DB::table('opsi_bayars')
         ->where('kode', $metode_pembayaran)
         ->value('opsi_bayar') ?? 'Unknown';
-
+        $adminFee = \DB::table('opsi_bayars')
+        ->where('kode', $metode_pembayaran)  // Use metode_pembayaran to fetch the admin fee
+        ->value('biaya_tetap') ?? 0;  // Default to 0 if no admin fee is found
+        
         $data = [
             'id' => $transaction->id,
             'id_transaction' => $transaction->id_transaction,
@@ -95,8 +107,9 @@ class TransactionController extends Controller
                 'tahun' => $tagihan->iuran->tahun ?? 'Tidak ada tahun',
                 'status' => $tagihan->status ?? 'Tidak ada status',
                 'metode_pembayaran' => $opsi_bayar ?? 'Tidak ada metode pembayaran',
-                // 'tanggal_bayar' => $tagihan->tanggal_bayar ?? 'Belum dibayar',
-                'nominal' => $tagihan->nominal,
+                'nominal' => $tagihan->iuran->jumlah,
+                'admin' => $adminFee,
+                'total' => $tagihan->iuran->jumlah + $adminFee,
             ],
         ];
     
