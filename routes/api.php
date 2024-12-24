@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\PekerjaanController;
 use App\Http\Controllers\Api\LogoutController;
 use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\TagihanController;
+use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\Pembayaran\PembayaranEwalletController;
 use App\Http\Controllers\Api\Pembayaran\PembayaranVaController;
 use App\Http\Controllers\Api\Pembayaran\PembayaranQrisController;
@@ -80,4 +81,7 @@ Route::middleware(['jwt.auth'])->group(function () {
     Route::post('/tagihan/bayar-card', [PembayaranCardController::class, 'bayarCard']);
     Route::post('/tagihan/bayar-va', [PembayaranVaController::class, 'bayarVa']);
     Route::post('/tagihan/bayar-qris', [PembayaranQrisController::class, 'bayarQris']);
+
+    Route::get('transactions', [TransactionController::class, 'index']);
+    Route::get('transactions/{id}', [TransactionController::class, 'show']);
 });

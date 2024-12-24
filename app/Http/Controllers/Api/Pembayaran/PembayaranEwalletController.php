@@ -33,7 +33,7 @@ class PembayaranEwalletController extends Controller
             $payload = [
                 "reference_id" => $id_transaksi,
                 "currency" => "IDR",
-                "amount" => $nominal,
+                "amount" => $nominal + 2500,
                 "checkout_method" => "ONE_TIME_PAYMENT",
                 "channel_code" => $validated['metode_pembayaran'],
                 "channel_properties" => $this->generateChannelProperties($validated),
@@ -98,19 +98,30 @@ class PembayaranEwalletController extends Controller
                 // 'iuran_id' => $validated['iuran_id'],
                 'status' => 'Belum Lunas',
                 'tanggal_bayar' => now(),
-                'nominal' => $validated['nominal'],
+                'nominal' => $validated['nominal'] + 2500,
                 'metode_pembayaran' => $validated['metode_pembayaran'],
                 // 'keterangan' => $validated['keterangan'],
                 'payment_status' => $json['status'],
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+
+            DB::table('transactions')->insert([
+                'status_transaction' => 'pending',
+                'id_transaction' => $id_transaksi,
+                'created_at' => now(),
+                'user_id' => $user->id,
+                'tagihan_id' => $validated['iuran_id'],
+            ]);
     
             Log::channel('single')->info('Transaksi berhasil disimpan', ['user_id' => $user->id, 'id_transaksi' => $id_transaksi]);
     
             return response()->json([
-                'status' => 'success',
+                'success' => true,
                 'message' => 'Transaksi berhasil diproses.',
+                'nominal' => $validated['nominal'],
+                'admin' => 2500,
+                'total' => $validated['nominal'] + 2500,
                 'data' => [
                     'id' => $json['id'],
                     'status' => $json['status'],

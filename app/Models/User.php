@@ -77,6 +77,10 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->belongsTo(Pekerjaan::class, 'pekerjaan_id');
     }
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'tagihan_id', 'id');
+    }
     /**
 * Get the identifier that will be stored in the subject claim of the JWT.
 *

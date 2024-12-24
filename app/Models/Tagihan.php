@@ -27,5 +27,10 @@ class Tagihan extends Model
     {
         return $this->belongsTo(Iuran::class, 'iuran_id');
     }
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'tagihan_id', 'id');
+    }
+
 }
 

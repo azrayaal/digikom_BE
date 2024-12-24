@@ -13,26 +13,37 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class TagihanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         try {
             // Authenticate the user and get their information
             $user = JWTAuth::parseToken()->authenticate();
     
+            // Ambil tahun saat ini
+            $currentYear = now()->year;
+    
+            // Ambil parameter tahun dari query string jika ada
+            $yearFilter = $request->query('tahun', $currentYear); // Default ke tahun sekarang jika tidak ada parameter tahun
+    
             // Retrieve tagihans for the authenticated user
-            $tagihans = Tagihan::where('user_id', $user->id)->get();
+            $tagihans = Tagihan::where('user_id', $user->id)
+                ->whereHas('iuran', function ($query) use ($yearFilter) {
+                    // Filter berdasarkan tahun yang diinginkan
+                    $query->where('tahun', $yearFilter);
+                })
+                ->get();
     
             // Format the result
             $result = $tagihans->map(function ($tagihan) {
                 // Access related iuran data through the relationship
                 $iuran = $tagihan->iuran;  // This will fetch the related iuran record
-    
+        
                 return [
                     'id' => $tagihan->id,
                     'iuran_id' => $tagihan->iuran_id,
-                    'bulan' => $tagihan->keterangan, 
-                    'tahun' => $iuran ? $iuran->tahun : 'N/A', 
-                    'jumlah' => $tagihan->nominal,   
+                    'bulan' => $tagihan->keterangan,
+                    'tahun' => $iuran ? $iuran->tahun : 'N/A',
+                    'jumlah' => $tagihan->nominal,
                     'status' => $tagihan->status,
                     'status_payment' => $tagihan->payment_status,
                     'tanggal_bayar' => $tagihan->tanggal_bayar ?? 'Belum Dibayar',  // If no tanggal_bayar, show 'Belum Dibayar'
@@ -55,6 +66,7 @@ class TagihanController extends Controller
             ], 500);
         }
     }
+    
 
     public function show($id)
     {

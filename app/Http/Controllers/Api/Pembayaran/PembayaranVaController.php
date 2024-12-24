@@ -36,7 +36,7 @@ class PembayaranVaController extends Controller
                 "bank_code" => $validated['metode_pembayaran'], // Misal 'BNI'
                 "name" => $user->full_name, // Anda bisa ambil nama dari user yang login
                 "is_closed" => "true",
-                "expected_amount" => $nominal,
+                "expected_amount" => $nominal + 2500,
                 "is_single_use" => "true"
             ];
             Log::channel('single')->debug('Payload untuk API Xendit', $payload);
@@ -96,22 +96,31 @@ class PembayaranVaController extends Controller
             ->where('id', $validated['iuran_id'])
             ->update([
                 'user_id' => $user->id,
-                // 'iuran_id' => $validated['iuran_id'],
                 'status' => 'Belum Lunas',
                 'tanggal_bayar' => now(),
-                'nominal' => $validated['nominal'],
+                'nominal' => $validated['nominal'] + 2500,
                 'metode_pembayaran' => 'VA_' . $validated['metode_pembayaran'], // Gabung string
-                // 'keterangan' => $validated['keterangan'],
                 'payment_status' => $json['status'],
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
 
+            DB::table('transactions')->insert([
+                'status_transaction' => 'pending',
+                'id_transaction' => $id_transaksi,
+                'created_at' => now(),
+                'user_id' => $user->id,
+                'tagihan_id' => $validated['iuran_id'],
+            ]);
+
             Log::channel('single')->info('Transaksi berhasil disimpan', ['user_id' => $user->id, 'id_transaksi' => $id_transaksi]);
 
             return response()->json([
-                'status' => 'success',
+                'success' => true,
                 'message' => 'Transaksi berhasil diproses.',
+                'nominal' => $validated['nominal'],
+                'admin' => 2500,
+                'total' => $validated['nominal'] + 2500,
                 'data' => [
                     'id' => $json['id'],
                     'status' => $json['status'],
