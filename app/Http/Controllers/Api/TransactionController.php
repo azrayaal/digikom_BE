@@ -25,7 +25,13 @@ class TransactionController extends Controller
     // Format data untuk setiap transaksi
     $data = $transactions->map(function ($transaction) {
         $tagihan = $transaction->tagihan;
-
+        $metode_pembayaran = $tagihan->metode_pembayaran;
+    
+        // Query the opsi_bayar table and set a default if not found
+        $opsi_bayar = \DB::table('opsi_bayars')
+            ->where('kode', $metode_pembayaran)
+            ->value('opsi_bayar') ?? 'Unknown';
+    
         return [
             'id' => $transaction->id,
             'id_transaction' => $transaction->id_transaction,
@@ -35,12 +41,14 @@ class TransactionController extends Controller
                 'bulan' => $tagihan->keterangan,
                 'tahun' => $tagihan->iuran->tahun,
                 'status' => $tagihan->status,
-                // 'status_payment' => $tagihan->payment_status,
-                'tanggal_bayar' => $tagihan->tanggal_bayar,
-                'nominal' => number_format($tagihan->nominal, 2, '.', ''),
+                'metode_pembayaran' => $opsi_bayar,
+                // 'tanggal_bayar' => $tagihan->tanggal_bayar,
+                'nominal' => $tagihan->nominal,
             ],
         ];
     });
+    
+    
 
     // Kembalikan respons daftar transaksi
     return response()->json([
@@ -72,6 +80,11 @@ class TransactionController extends Controller
             ], 404);
         }
         $tagihan = $transaction->tagihan;
+        $metode_pembayaran = $tagihan->metode_pembayaran;
+        $opsi_bayar = \DB::table('opsi_bayars')
+        ->where('kode', $metode_pembayaran)
+        ->value('opsi_bayar') ?? 'Unknown';
+
         $data = [
             'id' => $transaction->id,
             'id_transaction' => $transaction->id_transaction,
@@ -81,8 +94,9 @@ class TransactionController extends Controller
                 'bulan' => $tagihan->keterangan ?? 'Tidak ada keterangan',
                 'tahun' => $tagihan->iuran->tahun ?? 'Tidak ada tahun',
                 'status' => $tagihan->status ?? 'Tidak ada status',
-                'tanggal_bayar' => $tagihan->tanggal_bayar ?? 'Belum dibayar',
-                'nominal' => number_format($tagihan->nominal ?? 0, 2, '.', ''),
+                'metode_pembayaran' => $opsi_bayar ?? 'Tidak ada metode pembayaran',
+                // 'tanggal_bayar' => $tagihan->tanggal_bayar ?? 'Belum dibayar',
+                'nominal' => $tagihan->nominal,
             ],
         ];
     

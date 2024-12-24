@@ -23,6 +23,10 @@ class PembayaranVaController extends Controller
                 'keterangan' => 'nullable|string|max:255',
             ]);
 
+            $adminFee = \DB::table('opsi_bayars')
+            ->where('kode', $validated['metode_pembayaran'])
+            ->value('biaya_tetap');
+
             // Ambil user dari token JWT
             $user = JWTAuth::parseToken()->authenticate();
 
@@ -36,7 +40,7 @@ class PembayaranVaController extends Controller
                 "bank_code" => $validated['metode_pembayaran'], // Misal 'BNI'
                 "name" => $user->full_name, // Anda bisa ambil nama dari user yang login
                 "is_closed" => "true",
-                "expected_amount" => $nominal + 2500,
+                "expected_amount" => $nominal + $adminFee,
                 "is_single_use" => "true"
             ];
             Log::channel('single')->debug('Payload untuk API Xendit', $payload);
@@ -98,19 +102,20 @@ class PembayaranVaController extends Controller
                 'user_id' => $user->id,
                 'status' => 'Belum Lunas',
                 'tanggal_bayar' => now(),
-                'nominal' => $validated['nominal'] + 2500,
-                'metode_pembayaran' => 'VA_' . $validated['metode_pembayaran'], // Gabung string
+                'nominal' => $validated['nominal'] + $adminFee,
+                'metode_pembayaran' =>  $validated['metode_pembayaran'], // Gabung string
                 'payment_status' => $json['status'],
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
 
-            DB::table('transactions')->insert([
+            $recentTransaction_id = DB::table('transactions')->insertGetId([
                 'status_transaction' => 'pending',
-                'id_transaction' => $id_transaksi,
+                'id_transaction' => $id_transaksi,  // You may want to change this if it's generated elsewhere
                 'created_at' => now(),
                 'user_id' => $user->id,
                 'tagihan_id' => $validated['iuran_id'],
+                'nominal' => $validated['nominal'] + $adminFee,
             ]);
 
             Log::channel('single')->info('Transaksi berhasil disimpan', ['user_id' => $user->id, 'id_transaksi' => $id_transaksi]);
@@ -119,8 +124,9 @@ class PembayaranVaController extends Controller
                 'success' => true,
                 'message' => 'Transaksi berhasil diproses.',
                 'nominal' => $validated['nominal'],
-                'admin' => 2500,
-                'total' => $validated['nominal'] + 2500,
+                'admin' => $adminFee,
+                'total' => $validated['nominal'] + $adminFee,
+                'id_transaksi' => $recentTransaction_id,
                 'data' => [
                     'id' => $json['id'],
                     'status' => $json['status'],

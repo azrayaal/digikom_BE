@@ -22,6 +22,10 @@ class PembayaranEwalletController extends Controller
                 // 'keterangan' => 'nullable|string|max:255',
             ]);
     
+            $adminFee = \DB::table('opsi_bayars')
+            ->where('kode', $validated['metode_pembayaran'])
+            ->value('biaya_tetap');
+
             // Ambil user dari token JWT
             $user = JWTAuth::parseToken()->authenticate();
     
@@ -33,7 +37,7 @@ class PembayaranEwalletController extends Controller
             $payload = [
                 "reference_id" => $id_transaksi,
                 "currency" => "IDR",
-                "amount" => $nominal + 2500,
+                "amount" => $nominal + $adminFee,
                 "checkout_method" => "ONE_TIME_PAYMENT",
                 "channel_code" => $validated['metode_pembayaran'],
                 "channel_properties" => $this->generateChannelProperties($validated),
@@ -47,14 +51,7 @@ class PembayaranEwalletController extends Controller
             
             $apiKey = 'xnd_development_5UZCVR2pmMo9zjnFKWjDGaUjSWDWXxLUUKtBcIYXliUy9bqXpovluK3Gu0iXQC' ;
             $authHeader = 'Basic ' . base64_encode($apiKey . ':');
-            // Kirim permintaan ke API Xendit menggunakan Http:: (Laravel)
-            // $response = Http::timeout(30)  // Timeout 30 detik
-            //     ->withBasicAuth(config('services.xendit.api_key'), '')
-            //     ->withHeaders([  // Menambahkan headers kustom
-            //         'Authorization' => 'Basic ' . base64_encode(config('services.xendit.api_key') . ':'),
-            //         'for-user-id' => '65694e8b303521a8abfbd7db',  // Gunakan ID pengguna terautentikasi
-            //         'Content-Type' => 'application/json',
-            //     ])
+        
             $response = Http::timeout(30)  // Timeout 30 detik
             ->withHeaders([  // Menambahkan headers kustom
                 'Authorization' => $authHeader,
@@ -95,33 +92,32 @@ class PembayaranEwalletController extends Controller
             ->where('id', $validated['iuran_id'])
             ->update([
                 'user_id' => $user->id,
-                // 'iuran_id' => $validated['iuran_id'],
                 'status' => 'Belum Lunas',
                 'tanggal_bayar' => now(),
-                'nominal' => $validated['nominal'] + 2500,
+                'nominal' => $validated['nominal'] + $adminFee,
                 'metode_pembayaran' => $validated['metode_pembayaran'],
-                // 'keterangan' => $validated['keterangan'],
                 'payment_status' => $json['status'],
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
 
-            DB::table('transactions')->insert([
+            $recentTransaction_id = DB::table('transactions')->insertGetId([
                 'status_transaction' => 'pending',
-                'id_transaction' => $id_transaksi,
+                'id_transaction' => $id_transaksi,  // You may want to change this if it's generated elsewhere
                 'created_at' => now(),
                 'user_id' => $user->id,
                 'tagihan_id' => $validated['iuran_id'],
+                'nominal' => $validated['nominal'] + $adminFee,
             ]);
-    
             Log::channel('single')->info('Transaksi berhasil disimpan', ['user_id' => $user->id, 'id_transaksi' => $id_transaksi]);
     
             return response()->json([
                 'success' => true,
                 'message' => 'Transaksi berhasil diproses.',
                 'nominal' => $validated['nominal'],
-                'admin' => 2500,
-                'total' => $validated['nominal'] + 2500,
+                'admin' => $adminFee,
+                'total' => $validated['nominal'] + $adminFee,
+                'transaction_id' => $recentTransaction_id,
                 'data' => [
                     'id' => $json['id'],
                     'status' => $json['status'],
