@@ -75,7 +75,7 @@
                                             <td>{{ $item->iuran->tahun }}</td>
                                             <td>{{ $item->status }}</td>
                                             <td>
-                                                <a href="{{ route('iuran.show', $item->id) }}" class="btn btn-sm btn-warning">Detail</a>
+                                                <a href="{{ route('tagihan.show', $item->id) }}" class="btn btn-sm btn-warning">Detail</a>
                                             </td>
                                         </tr>
                                     @endforeach
