@@ -5,6 +5,7 @@ use App\Http\Controllers\IuranController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PrivacyController;
 
 Route::middleware(['auth:admin'])->group(function () {
     Route::resource('/', \App\Http\Controllers\IndexController::class);
@@ -41,3 +42,8 @@ Route::get('/test-log', function () {
     }
 });
 
+
+
+Route::get('/privacy', [PrivacyController::class, 'privacy'])->name('privacy');
+Route::get('/privacy/remove', [PrivacyController::class, 'remove'])->name('privacy.remove');
+Route::get('/privacy/show', [PrivacyController::class, 'show'])->name('privacy.show');
