@@ -30,33 +30,35 @@
                     </form>
                 </div>
 
-                <table class="table table-hover text-white">
-                    <thead>
-                        <tr style="background-color: #D1D1D1;">
-                            <th style="color: black;">No</th>
-                            <th style="color: black;">Judul</th>
-                            <th style="color: black;">Deskripsi</th>
-                            <th style="color: black;">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($peraturan_organisasi as $item)
-                        <tr onclick="location.href='{{ route('peraturan-organisasi.show', $item->id) }}'" style="cursor: pointer;">
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->judul }}</td>
-                            <td>{{ $item->deskripsi }}</td>
-                            <td>
-                                <a href="{{ route('peraturan-organisasi.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                <form action="{{ route('peraturan-organisasi.destroy', $item->id) }}" method="POST" style="display: inline-block;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus Peraturan Organisasi ini?')">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-hover text-white">
+                        <thead>
+                            <tr style="background-color: #D1D1D1;">
+                                <th style="color: black;">No</th>
+                                <th style="color: black;">Judul</th>
+                                <th style="color: black;">Deskripsi</th>
+                                <th style="color: black;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($peraturan_organisasi as $item)
+                            <tr onclick="location.href='{{ route('peraturan-organisasi.show', $item->id) }}'" style="cursor: pointer;">
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $item->judul }}</td>
+                                <td>{{ \Str::words($item->deskripsi, 15) }}</td>
+                                <td>
+                                    <a href="{{ route('peraturan-organisasi.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                    <form action="{{ route('peraturan-organisasi.destroy', $item->id) }}" method="POST" style="display: inline-block;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus Peraturan Organisasi ini?')">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
                 @if($peraturan_organisasi->isEmpty())
                 <p class="text-center text-muted mt-3">Tidak ada Peraturan Organisasi yang tersedia.</p>
                 @endif

@@ -85,3 +85,11 @@ Route::middleware(['jwt.auth'])->group(function () {
     Route::get('transactions', [TransactionController::class, 'index']);
     Route::get('transactions/{id}', [TransactionController::class, 'show']);
 });
+
+Route::get('/privacy/show', function () {
+    // Return JSON response
+    return response()->json([
+        'success' => true,
+        'data' => false, // atau false, tergantung kondisi
+    ], 200);
+});

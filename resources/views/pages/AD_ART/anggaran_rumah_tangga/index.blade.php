@@ -29,34 +29,35 @@
                         <button type="submit" class="btn btn-primary ml-2">Search</button>
                     </form>
                 </div>
-
-                <table class="table table-hover text-white">
-                    <thead>
-                        <tr style="background-color: #D1D1D1;">
-                            <th style="color: black;">No</th>
-                            <th style="color: black;">Judul</th>
-                            <th style="color: black;">Deskripsi</th>
-                            <th style="color: black;">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($anggaran_rumah_tangga as $item)
-                        <tr onclick="location.href='{{ route('anggaran-rumah-tangga.show', $item->id) }}'" style="cursor: pointer;">
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->judul_utama }}</td>
-                            <td>{{ $item->deskripsi }}</td>
-                            <td>
-                                <a href="{{ route('anggaran-rumah-tangga.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                <form action="{{ route('anggaran-rumah-tangga.destroy', $item->id) }}" method="POST" style="display: inline-block;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus Anggaran Rumah Tangga ini?')">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-hover text-white">
+                        <thead>
+                            <tr style="background-color: #D1D1D1;">
+                                <th style="color: black;">No</th>
+                                <th style="color: black;">Judul</th>
+                                <th style="color: black;">Deskripsi</th>
+                                <th style="color: black;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($anggaran_rumah_tangga as $item)
+                            <tr onclick="location.href='{{ route('anggaran-rumah-tangga.show', $item->id) }}'" style="cursor: pointer;">
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $item->judul_utama }}</td>
+                                <td>{{ \Str::words($item->deskripsi, 15) }}</td>
+                                <td>
+                                    <a href="{{ route('anggaran-rumah-tangga.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                    <form action="{{ route('anggaran-rumah-tangga.destroy', $item->id) }}" method="POST" style="display: inline-block;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus Anggaran Rumah Tangga ini?')">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
                 @if($anggaran_rumah_tangga->isEmpty())
                 <p class="text-center text-muted mt-3">Tidak ada Anggaran Rumah Tangga yang tersedia.</p>
                 @endif

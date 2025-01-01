@@ -29,40 +29,42 @@
                         <button type="submit" class="btn btn-primary ml-2">Search</button>
                     </form>
                 </div>
-
-                <table class="table table-hover text-white">
-                    <thead>
-                        <tr style="background-color: #D1D1D1;">
-                            <th style="color: black;">No</th>
-                            <th style="color: black;">Nama Usaha</th>
-                            <th style="color: black;">Waktu Operational</th>
-                            <th style="color: black;">Lokasi Usaha</th>
-                            <th style="color: black;">Nomor Usaha</th>
-                            <th style="color: black;">Pemilik</th>
-                            <th style="color: black;">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($usaha as $item)
-                        <tr onclick="location.href='{{ route('usaha.show', $item->id) }}'" style="cursor: pointer;">
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->nama_usaha }}</td>
-                            <td>{{ $item->waktu_operational }}</td>
-                            <td>{{ $item->lokasi_usaha }}</td>
-                            <td>{{ $item->nomor_usaha }}</td>
-                            <td>{{ $item->creator->full_name ?? 'Tidak Ada Jabatan' }}</td>
-                            <td>
-                                <a href="{{ route('usaha.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                <form action="{{ route('usaha.destroy', $item->id) }}" method="POST" style="display: inline-block;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus usaha ini?')">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                    <div class="table-responsive">
+                        <table class="table table-hover text-white">
+                            <thead>
+                                <tr style="background-color: #D1D1D1;">
+                                    <th style="color: black;">No</th>
+                                    <th style="color: black;">Nama Usaha</th>
+                                    <th style="color: black;">Waktu Operational</th>
+                                    <th style="color: black;">Lokasi Usaha</th>
+                                    <th style="color: black;">Nomor Usaha</th>
+                                    <th style="color: black;">Pemilik</th>
+                                    <th style="color: black;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($usaha as $item)
+                                <tr onclick="location.href='{{ route('usaha.show', $item->id) }}'" style="cursor: pointer;">
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $item->nama_usaha }}</td>
+                                    <td>{{ $item->waktu_operational }}</td>
+                                    <td>{{ $item->lokasi_usaha }}</td>
+                                    <td>{{ $item->nomor_usaha }}</td>
+                                    <td>{{ $item->creator->full_name ?? 'Tidak Ada Jabatan' }}</td>
+                                    <td>
+                                        <a href="{{ route('usaha.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                        <form action="{{ route('usaha.destroy', $item->id) }}" method="POST" style="display: inline-block;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus usaha ini?')">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                
                 @if($usaha->isEmpty())
                 <p class="text-center text-muted mt-3">Tidak ada usaha yang tersedia.</p>
                 @endif

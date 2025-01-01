@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
 //import return type View
+use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 class BeritaController extends Controller
@@ -45,30 +46,22 @@ class BeritaController extends Controller
         return view('pages.berita.create');
     }
 
-     // Menyimpan berita baru
     public function store(Request $request)
     {
-         // Validasi input
-        $request->validate([
-            'tittle' => 'required|unique:beritas,tittle',
-            'banner' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'content' => 'required',
-        ]);
-
-         // Menyimpan data berita ke database
+        // Menyimpan data berita ke database
         $berita = new Berita;
         $berita->tittle = $request->tittle;
         $berita->content = $request->content;
         $berita->created_by = Auth::guard('admin')->user()->id; 
-
-         // Menyimpan banner gambar jika ada
+        
+        // Menyimpan banner gambar
         if ($request->hasFile('banner')) {
-            $imagePath = $request->file('banner')->store('public/berita');
-            $berita->banner = basename($imagePath);
+            $imagePath = $request->file('banner')->store('berita', 'public');
+            $berita->banner = $imagePath; // Simpan path lengkap
         }
+
         $berita->save();
 
-         // Redirect setelah berhasil menyimpan
         return redirect()->route('berita.index')->with('success', 'Berita berhasil dibuat!');
     }
 
@@ -96,13 +89,8 @@ class BeritaController extends Controller
 
     // Update banner jika ada file baru
     if ($request->hasFile('banner')) {
-        // Hapus banner lama
-        if ($berita->banner) {
-            Storage::delete('public/berita/' . $berita->banner);
-        }
-        // Simpan banner baru
-        $imagePath = $request->file('banner')->store('public/berita');
-        $berita->banner = basename($imagePath);
+        $imagePath = $request->file('banner')->store('berita', 'public');
+        $berita->banner = $imagePath; // Simpan path lengkap
     }
 
     $berita->save();

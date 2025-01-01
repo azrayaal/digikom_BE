@@ -75,7 +75,7 @@
                                             <td><?php echo e($item->iuran->tahun); ?></td>
                                             <td><?php echo e($item->status); ?></td>
                                             <td>
-                                                <a href="<?php echo e(route('iuran.show', $item->id)); ?>" class="btn btn-sm btn-warning">Detail</a>
+                                                <a href="<?php echo e(route('tagihan.show', $item->id)); ?>" class="btn btn-sm btn-warning">Detail</a>
                                             </td>
                                         </tr>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

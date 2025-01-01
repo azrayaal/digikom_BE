@@ -52,7 +52,9 @@
                                     <p class="text-muted mb-0">By: <?php echo e(Str::limit(strip_tags($item->creator->full_name), 100)); ?></p>
                                 </div>
                                 <div class="text-sm-right pt-2 pt-sm-0 ml-auto">
-                                    <p class="text-muted mb-2"><?php echo e($item->created_at->diffForHumans()); ?></p>
+                                    <p class="text-muted mb-2"><?php echo e($item->created_at->timezone('Asia/Jakarta')->diffForHumans()); ?>
+
+                                    </p>
                                     <p class="text-muted mb-0">Date: <?php echo e($item->created_at->format('d M Y, H:i') ?? 'Tidak diketahui'); ?></p>
                                     <!-- Tombol Edit dan Delete -->
                                     <div class="mt-2">

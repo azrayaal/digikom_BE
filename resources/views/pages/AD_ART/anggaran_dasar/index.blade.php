@@ -30,6 +30,7 @@
                     </form>
                 </div>
 
+             <div class="table-responsive">
                 <table class="table table-hover text-white">
                     <thead>
                         <tr style="background-color: #D1D1D1;">
@@ -44,7 +45,7 @@
                         <tr onclick="location.href='{{ route('anggaran-dasar.show', $item->id) }}'" style="cursor: pointer;">
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->judul_utama }}</td>
-                            <td>{{ $item->deskripsi }}</td>
+                            <td>{{ \Str::words($item->deskripsi, 15) }}</td>
                             <td>
                                 <a href="{{ route('anggaran-dasar.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
                                 <form action="{{ route('anggaran-dasar.destroy', $item->id) }}" method="POST" style="display: inline-block;">
@@ -57,6 +58,9 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+
+
                 @if($anggaran_dasar->isEmpty())
                 <p class="text-center text-muted mt-3">Tidak ada Anggaran Tersedia yang tersedia.</p>
                 @endif

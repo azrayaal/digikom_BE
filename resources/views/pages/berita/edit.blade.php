@@ -5,10 +5,10 @@
 <div class="main-panel">
     <div class="content-wrapper" style="background-color: #D1D1D1;">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="card-title text-black">Edit iuran "{{ $iuran->nama_iuran }}"</h3>
+            <h3 class="card-title text-black">Edit berita "{{ $berita->nama_berita }}"</h3>
             <div class="mb-3">
-                <button onclick="window.location.href='{{ route('iuran.index') }}'" class="btn btn-primary">
-                    ← Kembali ke Daftar iuran
+                <button onclick="window.location.href='{{ route('berita.index') }}'" class="btn btn-primary">
+                    ← Kembali ke Daftar berita
                 </button>
             </div>
         </div>

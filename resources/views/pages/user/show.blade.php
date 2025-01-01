@@ -1,12 +1,9 @@
-
-
 @include('components.header')
 @include('components.sidebar')
 @include('components.navbar')
 
-    
-    <!-- partial -->
-    <div class="main-panel">
+<!-- partial -->
+<div class="main-panel">
     <div class="content-wrapper" style="background-color: #D1D1D1;">
         <!-- Tombol Kembali -->
         <div class="mb-3">
@@ -19,18 +16,19 @@
         <div class="card" style="background-color: #2A2A2A; border-radius: 10px;">
             <div class="card-body">
                 <div class="row">
+                    <!-- Profile Picture -->
+                    <div class="col-md-4">
+                        <h5 class="text-muted fw-bold">Foto Profil</h5>
+                        <img src="{{ asset('storage/' . $user->profile_picture) }}" alt="Profile Picture" class="img-fluid" style="max-width: 200px; border-radius: 8px;">
+                    </div>
                     <!-- Info anggota -->
                     <div class="col-md-4">
                         <h5 class="text-muted fw-bold">Detail Anggota</h5>
-                        <p class="text-white"><strong>Nama Anggota:</strong> {{ $anggota->full_name }}</p>
+                        <p class="text-white"><strong>Nama Anggota:</strong> {{ $user->full_name }}</p>
+                        <p class="text-white"><strong>Email:</strong> {{ $user->email }}</p>
+                        <p class="text-white"><strong>Nomor Telepon:</strong> {{ $user->phone_number }}</p>
+                        <p class="text-white"><strong>Jabatan:</strong> {{ $user->creator->nama_jabatan ?? 'Tidak Ada Jabatan' }}</p>
                     </div>
-                    <!-- Deskripsi -->
-                    <!-- <div class="col-md-8">
-                        <h5 class="text-muted fw-bold">Deskripsi</h5>
-                        <div class="text-white">
-                            {!! $anggota->deskripsi_anggota !!}
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </div>
@@ -45,5 +43,4 @@
     </footer>
 </div>
 
-
-@include( 'components.footer')
+@include('components.footer')

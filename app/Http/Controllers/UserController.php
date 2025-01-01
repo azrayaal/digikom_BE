@@ -68,11 +68,8 @@ class UserController extends Controller
          // Menyimpan profile picture jika ada
         if ($request->hasFile('profile_picture')) {
              // Menyimpan file gambar ke folder 'uploads/profile_pictures'
-            $imageName = time() . '.' . $request->profile_picture->extension();
-            $request->profile_picture->move(public_path('uploads/profile_pictures'), $imageName);
-    
-             // Menyimpan nama file gambar di database
-            $user->profile_picture = 'uploads/profile_pictures/' . $imageName;
+             $imagePath = $request->file('profile_picture')->store('profile_picture', 'public');
+             $user->profile_picture = $imagePath; // Simpan path lengkap
         }
     
         $user->phone_number = $request->phone_number;
@@ -95,15 +92,6 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        // Validasi input
-        $request->validate([
-            'full_name' => 'required|unique:users,full_name',
-            'email' => 'required',
-            'password' => 'required|min:8',  // Menambahkan aturan minimal panjang password
-            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Mengubah 'imge' menjadi 'image' dan menambahkan nullable
-            'phone_number' => 'required',
-            'jabatan_id' => 'required|exists:jabatans,id', // Memastikan jabatan_id valid
-        ]);
     
         // Cari user berdasarkan ID
         $user = User::findOrFail($id);  // Menemukan user berdasarkan ID, jika tidak ada maka 404
@@ -116,12 +104,9 @@ class UserController extends Controller
         // Menyimpan profile picture jika ada
         if ($request->hasFile('profile_picture')) {
             // Menyimpan file gambar ke folder 'uploads/profile_pictures'
-        $imageName = time() . '.' . $request->profile_picture->extension();
-        $request->profile_picture->move(public_path('uploads/profile_pictures'), $imageName);
-
-            // Menyimpan nama file gambar di database
-        $user->profile_picture = 'uploads/profile_pictures/' . $imageName;
-        }
+            $imagePath = $request->file('profile_picture')->store('profile_picture', 'public');
+            $user->profile_picture = $imagePath; // Simpan path lengkap
+    }
 
         $user->phone_number = $request->phone_number;
         $user->jabatan_id = $request->jabatan_id;
@@ -152,6 +137,4 @@ class UserController extends Controller
         $message = $user->status == 1 ? 'User berhasil diaktifkan kembali (unsuspend)!' : 'User berhasil disuspend!';
         return redirect()->route('anggota.index')->with('success', $message);
     }
-    
-
 }

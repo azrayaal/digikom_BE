@@ -16,8 +16,4 @@ class PrivacyController extends Controller
     {
         return view('pages.privacy.remove');
     }
-    public function show() : View
-    {
-        return view('pages.privacy.show');
-    }
 }
