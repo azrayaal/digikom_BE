@@ -8,6 +8,7 @@ use App\Models\Iuran;
 use App\Models\User;
 use App\Models\Tagihan; // Pastikan model Tagihan diimpor
 use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
 
 class IuranController extends Controller
 {
@@ -92,47 +93,93 @@ class IuranController extends Controller
    /**
  * Enroll tagihan dari iuran untuk bulan Januari hingga Desember.
  */
-        public function enrollTagihan($id)
-        {
-            $iuran = Iuran::findOrFail($id); // Cari iuran berdasarkan ID
+public function enrollTagihan($id)
+{
+    try {
+        // Cari iuran berdasarkan ID
+        $iuran = Iuran::findOrFail($id);
 
-            // Ambil semua user yang aktif
-            $users = User::where('status', 'aktif')->get();
+        // Log untuk memastikan iuran ditemukan
+        \Log::info('Iuran found', ['iuran_id' => $iuran->id]);
 
-            $tahun = $iuran->tahun; // Tahun dari iuran
-            $bulan = [
-                'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-            ];
+        // Ambil semua user yang aktif
+        $users = User::where('status', 'aktif')->get();
 
-            foreach ($users as $user) {
-                foreach ($bulan as $index => $namaBulan) {
-                    // Cek apakah tagihan untuk user, bulan, dan tahun ini sudah ada
-                    $existingTagihan = Tagihan::where('user_id', $user->id)
-                        ->where('iuran_id', $iuran->id)
-                        ->whereYear('created_at', $tahun)
-                        ->whereMonth('created_at', $index + 1)
-                        ->first();
+        // Log untuk memastikan pengguna ditemukan
+        \Log::info('Users found', ['user_count' => $users->count()]);
 
-                    if (!$existingTagihan) {
-                        // Jika belum ada, buat tagihan baru
-                        $tagihan = new Tagihan;
-                        $tagihan->user_id = $user->id;
-                        $tagihan->iuran_id = $iuran->id;
-                        $tagihan->nominal = $iuran->jumlah;
-                        $tagihan->keterangan = $namaBulan;
-                        $tagihan->status = 'Belum Lunas'; // Default status
-                        $tagihan->created_at = \Carbon\Carbon::create($tahun, $index + 1, 1); // Buat tanggal dengan bulan dan tahun
-                        $tagihan->updated_at = \Carbon\Carbon::create($tahun, $index + 1, 1);
-                        $tagihan->save();
-                    } else {
-                        return redirect()->route('iuran.index')->with('warning', 'Tagihan untuk tahun ' . $tahun . ' dan bulan ' . $namaBulan . ' sudah ada.');
-                    }
+        $tahun = $iuran->tahun; 
+        $bulan = [
+            'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+        ];
+
+        foreach ($users as $user) {
+            foreach ($bulan as $index => $namaBulan) {
+                // Cek apakah tagihan untuk user, bulan, dan tahun ini sudah ada
+                $existingTagihan = Tagihan::where('user_id', $user->id)
+                    ->where('iuran_id', $iuran->id)
+                    ->whereYear('created_at', $tahun)
+                    ->whereMonth('created_at', $index + 1)
+                    ->exists();
+
+                if (!$existingTagihan) {
+                    // Jika belum ada, buat tagihan baru
+                    $tagihan = new Tagihan;
+                    $tagihan->user_id = $user->id;
+                    $tagihan->iuran_id = $iuran->id;
+                    $tagihan->nominal = $iuran->jumlah;
+                    $tagihan->keterangan = $namaBulan;
+                    $tagihan->status = 'Belum Lunas';
+
+                    // Setting created_at and updated_at for specific month/year
+                    $tagihan->created_at = \Carbon\Carbon::create($tahun, $index + 1, 1);
+                    $tagihan->updated_at = \Carbon\Carbon::create($tahun, $index + 1, 1);
+
+                    // Log before saving
+                    \Log::info('Saving tagihan', [
+                        'user_id' => $user->id,
+                        'iuran_id' => $iuran->id,
+                        'nominal' => $tagihan->nominal,
+                        'bulan' => $namaBulan,
+                    ]);
+
+                    // Save the tagihan to the database
+                    $tagihan->save();
+
+                    // Log after saving
+                    \Log::info('Tagihan saved successfully', [
+                        'user_id' => $tagihan->user_id,
+                        'iuran_id' => $tagihan->iuran_id,
+                        'nominal' => $tagihan->nominal,
+                    ]);
+                } else {
+                    // If tagihan already exists, display warning
+                    \Log::warning('Tagihan already exists', [
+                        'user_id' => $user->id,
+                        'iuran_id' => $iuran->id,
+                        'bulan' => $namaBulan,
+                    ]);
+
+                    // Redirect with warning
+                    return redirect()->route('iuran.index')->with('warning', 'Tagihan untuk tahun ' . $tahun . ' dan bulan ' . $namaBulan . ' sudah ada.');
                 }
             }
-
-            return redirect()->route('iuran.index')->with('success', 'Tagihan berhasil dienroll untuk iuran ini!');
         }
+
+        // Redirect to the index with success message
+        return redirect()->route('iuran.index')->with('success', 'Tagihan berhasil dienroll untuk iuran ini!');
+    } catch (\Exception $e) {
+        // Log error
+        \Log::error('Error enrolling tagihan: ' . $e->getMessage(), [
+            'exception' => $e,
+        ]);
+
+        // Redirect with error message
+        return redirect()->route('iuran.index')->with('error', 'Terjadi kesalahan saat menambahkan tagihan.');
+    }
+}
+
 
         public function laporanIuran(Request $request)
         {
@@ -146,7 +193,8 @@ class IuranController extends Controller
             
             // Build the query
             $iuran = Tagihan::query();
-            
+            $years = Iuran::select('tahun')->distinct()->pluck('tahun')->sort();
+
             if ($search) {
                 $iuran->where('tahun', 'like', "%{$search}%")
                     ->orWhere('jumlah', 'like', "%{$search}%")
@@ -195,7 +243,7 @@ class IuranController extends Controller
             // Pass the users for the filter dropdown
             $users = User::all();
         
-            return view('pages.iuran.laporan', compact('iuran', 'users', 'search', 'year', 'month', 'userId'));
+            return view('pages.iuran.laporan', compact('iuran', 'users', 'search', 'year', 'month', 'userId', 'years'));
         }
 
         public function showTagihan($id)

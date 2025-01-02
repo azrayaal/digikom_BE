@@ -10,6 +10,16 @@
             <h3 class="card-title text-black">Tagihan:</h3>
             <a href="{{ route('iuran.create') }}" class="btn btn-primary">Create New Tagihan</a>
         </div>
+        @if(session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+        @if(session('warning'))
+            <div class="alert alert-warning">{{ session('warning') }}</div>
+        @endif
+        @if(session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
+
         <div class="col grid-margin stretch-card">
             <div class="card" style="background-color: #2A2A2A;">
                 <div class="card-body">
@@ -65,6 +75,7 @@
                                     <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus iuran ini?')">Delete</button>
                                 </form>
                                 <a href="{{ route('iuran.enroll', $item->id) }}" class="btn btn-sm btn-primary">Enroll</a>
+                                
                             </td>
                         </tr>
                         @endforeach

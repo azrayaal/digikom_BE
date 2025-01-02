@@ -25,11 +25,15 @@
                     <div class="mb-4">
                         <form action="{{ route('iuran.tagihan') }}" method="GET" class="d-flex justify-content-between">
                             <div class="d-flex">
-                                <select name="year" class="form-control text-white" onchange="this.form.submit()">
-                                    <option value="" style>-- Select Year --</option>
-                                    <option value="2023" {{ request('year') == '2023' ? 'selected' : '' }}>2023</option>
-                                    <option value="2024" {{ request('year') == '2024' ? 'selected' : '' }}>2024</option>
-                                </select>
+                            <!-- Dropdown untuk Year -->
+                            <select name="year" class="form-control ml-2 text-white" onchange="this.form.submit()">
+                                <option value="">-- Select Year --</option>
+                                @foreach($years as $year)
+                                    <option value="{{ $year }}" {{ request('year') == $year ? 'selected' : '' }}>
+                                        {{ $year }}
+                                    </option>
+                                @endforeach
+                            </select>
 
                                 <select name="month" class="form-control ml-2 text-white" onchange="this.form.submit()">
                                     <option value="">-- Select Month --</option>

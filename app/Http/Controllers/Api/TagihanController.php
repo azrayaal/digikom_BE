@@ -18,26 +18,25 @@ class TagihanController extends Controller
         try {
             // Authenticate the user and get their information
             $user = JWTAuth::parseToken()->authenticate();
-    
-            // Ambil tahun saat ini
+        
+            // Get the current year
             $currentYear = now()->year;
-    
-            // Ambil parameter tahun dari query string jika ada
-            $yearFilter = $request->query('tahun', $currentYear); // Default ke tahun sekarang jika tidak ada parameter tahun
-    
-            // Retrieve tagihans for the authenticated user
-            $tagihans = Tagihan::where('user_id', $user->id)
+        
+            // Get the 'tahun' parameter from the query string, defaulting to the current year
+            $yearFilter = $request->query('tahun', $currentYear);
+        
+            // Retrieve tagihans for the authenticated user, including eager loading for 'iuran' relationship
+            $tagihans = Tagihan::with('iuran') // Eager load the 'iuran' relationship
+                ->where('user_id', $user->id)
                 ->whereHas('iuran', function ($query) use ($yearFilter) {
-                    // Filter berdasarkan tahun yang diinginkan
-                    $query->where('tahun', $yearFilter);
+                    // Filter based on the desired year
+                    $query->where('tahun', $yearFilter); // Filter by 'tahun'
                 })
                 ->get();
-    
-            // Format the result
-            $result = $tagihans->map(function ($tagihan) {
-                // Access related iuran data through the relationship
-                $iuran = $tagihan->iuran;  // This will fetch the related iuran record
         
+            // Map the results into a formatted array
+            $result = $tagihans->map(function ($tagihan) {
+                $iuran = $tagihan->iuran; // Access related 'iuran' data
                 return [
                     'id' => $tagihan->id,
                     'iuran_id' => $tagihan->iuran_id,
@@ -46,12 +45,21 @@ class TagihanController extends Controller
                     'jumlah' => $tagihan->nominal,
                     'status' => $tagihan->status,
                     'status_payment' => $tagihan->payment_status,
-                    'tanggal_bayar' => $tagihan->tanggal_bayar ?? 'Belum Dibayar',  // If no tanggal_bayar, show 'Belum Dibayar'
-                    'nominal' => $tagihan->nominal ?? 0, // If no nominal, default to 0
+                    'tanggal_bayar' => $tagihan->tanggal_bayar ?? 'Belum Dibayar', // Default if null
+                    'nominal' => $tagihan->nominal ?? 0, // Default if null
                 ];
             });
-    
-            // Return the response with the data
+        
+            // Check if data is empty and return a meaningful response
+            if ($result->isEmpty()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'No data found for the given year',
+                    'data' => [],
+                ]);
+            }
+        
+            // Return the response with the formatted data
             return response()->json([
                 'success' => true,
                 'message' => 'List Data Tagihan',
@@ -66,6 +74,7 @@ class TagihanController extends Controller
             ], 500);
         }
     }
+    
     
 
     public function show($id)
